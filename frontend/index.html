@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Alertas de Fumaça</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>🚨 Monitoramento da Sala</h1>
+
+  <!-- Status da sala -->
+  <div id="status" class="status instavel">
+    🟢 Sala instável (sem fumaça detectada)
+  </div>
+
+  <button id="atualizar">🔄 Atualizar lista</button>
+
+  <h2>Histórico de Alertas</h2>
+  <table id="tabela">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Data/Hora</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Os dados vão aparecer aqui -->
+    </tbody>
+  </table>
+
+  <script src="script.js"></script>
+</body>
+</html>

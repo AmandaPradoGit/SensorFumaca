@@ -1,0 +1,52 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background: #f9f9f9;
+}
+
+h1 {
+  text-align: center;
+}
+
+button {
+  margin-bottom: 15px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+
+th {
+  background: #f0f0f0;
+}
+
+.status {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 20px 0;
+  padding: 10px;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.instavel {
+  background-color: #d4f8d4;
+  color: #2e7d32;
+  border: 2px solid #4caf50;
+}
+
+.alerta {
+  background-color: #ffd4d4;
+  color: #b71c1c;
+  border: 2px solid #f44336;
+}
