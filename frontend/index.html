@@ -4,10 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sistema de Alertas de Fumaça</title>
-  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>🚨 Monitoramento da Sala</h1>
+  <div class="flex items-center justify-center h-72 bg-gray-100">
+            <h1 class="text-3xl mt-16 font-mono text-gray-600">Monitoramento da Sala</h1>
+            <div class="w-32 h-8 bg-green-100">Status</div>
+        </div>
 
   <!-- Status da sala -->
   <div id="status" class="status instavel">
@@ -30,5 +34,6 @@
   </table>
 
   <script src="script.js"></script>
+  <script src="components/header.js"></script>
 </body>
 </html>
