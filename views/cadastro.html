@@ -14,7 +14,7 @@
 </head>
 <body class="min-h-screen flex items-center justify-center bg-[var(--mq-light-bg)] font-sans text-gray-800 relative overflow-hidden">
 
-    <img src="/frontend/imgs/fumaca.png"  
+    <img src="/views/imgs/fumaca.png"  
          class="absolute right-0 top-0 w-[650px] h-auto 
                 transform translate-x-[20%] -translate-y-[10%] 
                 rotate-[-10deg] opacity-90 z-10 hidden lg:block">
@@ -28,7 +28,7 @@
     <div class="w-full max-w-sm bg-white p-8 md:p-10 rounded-xl shadow-2xl z-20">
         
         <h1 class="text-4xl font-normal mb-8 text-gray-800">
-            Entrar
+            Cadastrar
         </h1>
 
         <form>
@@ -49,20 +49,25 @@
                        class="w-full bg-gray-100 border-none rounded-lg px-3 py-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300 transition duration-150 h-10" 
                        placeholder="">
             </div>
+             <div class="mb-6">
+                <label for="senha" class="block text-base font-medium text-gray-700 mb-1">
+                    Confirmar senha:
+                </label>
+                <input type="password" id="ConfirmarSenha" 
+                       class="w-full bg-gray-100 border-none rounded-lg px-3 py-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300 transition duration-150 h-10" 
+                       placeholder="">
+            </div>
 
             <div class="mb-4">
                 <button type="submit" 
                         class="w-full bg-[--mq-red] text-white px-6 py-2 rounded-lg shadow-md hover:bg-rose-700 transition duration-300 text-base font-semibold h-10">
-                    Entrar
+                    Cadastrar
                 </button>
             </div>
             
             <div class="text-left mt-4">
-                <a href="#" class="block text-gray-700 text-sm hover:underline mb-1">
-                    <u>Esqueci minha senha</u>
-                </a>
                 <a href="#" class="block text-gray-700 text-sm hover:underline">
-                    <u>Não possuo uma conta</u>
+                    <u>Já possuo uma conta</u>
                 </a>
             </div>
         </form>
