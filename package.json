@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "socket": "^1.1.25"
+  }
+}
