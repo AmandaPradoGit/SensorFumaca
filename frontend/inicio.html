@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MQ-Fire Sensor de Fumaça</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --mq-red: #fb5757;
+        }
+        body {
+            background: #f3f3f3;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Header -->
+    <header class="p-4">
+        <nav class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="#" class="flex items-center">
+                <img src="imgs/icon.png" alt="MQ-FIRE" class="h-8">
+            </a>
+            <div class="flex gap-4">
+                <button class="px-6 py-2 text-gray-600 hover:text-gray-800 transition-colors">
+                    Cadastrar
+                </button>
+                <button class="px-6 py-2 bg-[--mq-red] text-white rounded-lg hover:bg-red-600 transition-colors">
+                    Entrar
+                </button>
+            </div>
+        </nav>
+    </header>
+
+
+    <!-- Hero Section -->
+    <main class="relative max-w-7xl mx-auto px-4 pt-16">
+        <div class="grid md:grid-cols-2 gap-8 items-center">
+            <!-- Text Content -->
+            <div>
+                <h1 class="text-7xl font-bold text-[--mq-red] leading-tight">
+                    Sensor de<br>Fumaça
+                </h1>
+            </div>
+            
+            <!-- Image -->
+            <div class="relative">
+                <img src="imgs/fumaca.png" alt="Fumaça Decorativa" class="absolute top-0 right-0 w-full opacity-80 z-0">
+                <img src="imgs/mq2.png" alt="Sensor MQ-2" class="relative z-10 max-w-[300px] mx-auto transform rotate-12">
+            </div>
+        </div>
+
+
+    <section class="py-4">
+        <div class="w-full max-w-4xl mx-auto px-6 lg:px-0 z-40 relative">
+            <div class="bg-white p-10 lg:p-16 rounded-xl shadow-2xl">
+                <h2 class="text-4xl font-normal mb-10 text-gray-800">Sobre</h2>
+                
+                <div class="flex flex-col md:flex-row gap-8 lg:gap-12 items-start">
+                    <div class="flex-shrink-0 w-full md:w-60 h-40 bg-[--mq-red] rounded-lg p-6 flex items-center justify-center shadow-lg relative overflow-hidden">
+                        <div class="absolute inset-0 bg-black/10"></div>
+                        <div class="text-center z-10">
+                            <span class="text-white text-3xl font-extrabold leading-none">MQ-FIRE</span>
+                            <span class="block text-white text-xs tracking-widest mt-1 border-t border-white/50 pt-1">SENSOR</span>
+                        </div>
+                    </div>
+                    
+                    <div class="text-gray-600 text-base leading-relaxed">
+                        <p>O MQ-fire é um sistema de segurança para detecção de gases como: GLP(gás liquefeito de petróleo), fumaça, álcool, propano, metano, hidrogênio e monóxido de carbono(CO). Após detecção dos gases o sistema envia alertas ao usuário, através do site e do aplicativo.</p>
+                        <p class="mt-4">O sistema também gera dashboards sobre o volume de gases no ambiente e faz o acompanhamento em tempo real do local monitorado, mostrando o status atual da sala, que pode ser estável, em alerta ou instável, e deixa salvo em uma tabela todos os alertas e instabilidades.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <footer class="text-center py-6 mt-16">
+        <div class="text-sm font-extrabold mb-1">
+            <img src="../frontend/imgs/icon.png" alt="Logo MQ-FIRE" class="w-12 h-5 inline-block mr-2 align-middle">
+        </div>
+        <p class="text-xs text-gray-500">© Todos os direitos estão reservados</p>
+    </footer>
+
+</body>
+</html>
