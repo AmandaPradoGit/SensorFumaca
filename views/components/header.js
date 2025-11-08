@@ -8,6 +8,7 @@ header.innerHTML = `
             </a>
             <div class="flex items-center space-x-6 md:space-x-8">
           <a href="../frontend/dashboard.html" class="text-black hover:text-gray-700 text-sm md:text-base">Dashboard</a>
+          <a href="../frontend/dashboard.html" class="text-black hover:text-gray-700 text-sm md:text-base">Sensores</a>
           <img src="imgs/profilepic.png" alt="Perfil" class="w-6 h-6 md:w-8 md:h-8 rounded-full" />
         </div>
         </nav>
@@ -21,7 +22,7 @@ header.innerHTML = `
   if (profilePic) {
     profilePic.style.cursor = 'pointer'; 
     profilePic.addEventListener('click', () => {
-      window.location.href = 'profile.php';
+      window.location.href = 'perfil.html';
     });
   }
 
@@ -29,7 +30,7 @@ header.innerHTML = `
   if (icon) {
     icon.style.cursor = 'pointer';
     icon.addEventListener('click', () => {
-      window.location.href = 'home.php';
+      window.location.href = 'principal.html';
     });
   }
 });
