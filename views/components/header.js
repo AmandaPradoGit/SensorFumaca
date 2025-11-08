@@ -8,7 +8,7 @@ header.innerHTML = `
             </a>
             <div class="flex items-center space-x-6 md:space-x-8">
           <a href="../frontend/dashboard.html" class="text-black hover:text-gray-700 text-sm md:text-base">Dashboard</a>
-          <a href="../frontend/dashboard.html" class="text-black hover:text-gray-700 text-sm md:text-base">Sensores</a>
+          <a href="../views/sensores.html" class="text-black hover:text-gray-700 text-sm md:text-base">Sensores</a>
           <img src="imgs/profilepic.png" alt="Perfil" class="w-6 h-6 md:w-8 md:h-8 rounded-full" />
         </div>
         </nav>

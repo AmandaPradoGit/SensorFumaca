@@ -21,73 +21,18 @@
         <h1 class="text-4xl py-24 font-normal text-gray-800 tracking-tight mb-8">
             Meus Sensores Cadastrados
         </h1>
+        <a href="cadastrarSensores.html">+ Adicionar Sensor</a>
         
         
         <div class="mb-6">
             <p class="text-gray-600">Clique em um cartão para ver o status detalhado da sala.</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            
-            <a href="dashboard.html?local_id=1" class="block bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1 border-t-4 border-green-500">
-                <div class="p-6">
-                    <div class="flex justify-between items-start mb-4">
-                        <h2 class="text-2xl font-semibold text-gray-800">Cozinha Industrial</h2>
-                        <div class="flex items-center gap-2 text-green-600 font-bold">
-                            <div class="w-4 h-4 rounded-full bg-green-500"></div>
-                            <span>Estável</span>
-                        </div>
-                    </div>
-                    
-                    <p class="text-sm text-gray-500 mb-4">Sensor MQ-2: MQFIRE-001</p>
-
-                    <div class="pt-2 border-t border-gray-100">
-                        <p class="text-gray-700">Leitura Atual: <span class="font-bold text-green-500">25 PPM</span></p>
-                        <p class="text-gray-500 text-sm">Última leitura: 2 min atrás</p>
-                    </div>
-                </div>
-            </a>
-
-            <a href="dashboard.html?local_id=2" class="block bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1 border-t-4 border-yellow-500">
-                <div class="p-6">
-                    <div class="flex justify-between items-start mb-4">
-                        <h2 class="text-2xl font-semibold text-gray-800">Sala de Servidores</h2>
-                        <div class="flex items-center gap-2 text-yellow-600 font-bold">
-                            <div class="w-4 h-4 rounded-full bg-yellow-500"></div>
-                            <span>Atenção</span>
-                        </div>
-                    </div>
-                    
-                    <p class="text-sm text-gray-500 mb-4">Sensor MQ-2: MQFIRE-002</p>
-
-                    <div class="pt-2 border-t border-gray-100">
-                        <p class="text-gray-700">Leitura Atual: <span class="font-bold text-yellow-600">80 PPM</span></p>
-                        <p class="text-gray-500 text-sm">Última leitura: 10 seg atrás</p>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="dashboard.html?local_id=3" class="block bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1 border-t-4 border-red-500">
-                <div class="p-6">
-                    <div class="flex justify-between items-start mb-4">
-                        <h2 class="text-2xl font-semibold text-gray-800">Depósito 2A</h2>
-                        <div class="flex items-center gap-2 text-red-600 font-bold">
-                            <div class="w-4 h-4 rounded-full bg-red-500"></div>
-                            <span>Alerta!</span>
-                        </div>
-                    </div>
-                    
-                    <p class="text-sm text-gray-500 mb-4">Sensor MQ-2: MQFIRE-003</p>
-
-                    <div class="pt-2 border-t border-gray-100">
-                        <p class="text-gray-700">Leitura Atual: <span class="font-bold text-red-500">250 PPM</span></p>
-                        <p class="text-red-500 text-sm font-semibold">Última leitura: AGORA</p>
-                    </div>
-                </div>
-            </a>
-            
-            </div>
+        <div id="sensores-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Cards serão inseridos aqui via JavaScript -->
+        </div>
     </main>
     <script type="module" src="components/header.js"></script>
+    <script src="components/sensores.js"></script>
 </body>
 </html>
