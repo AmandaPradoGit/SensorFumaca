@@ -4,7 +4,7 @@ const db = mysql.createConnection({
   host: "172.17.0.3",     
   port: 3306,           
   user: "user1232025",        
-  password: "MARIADB_ROOT_PASSWORD",
+  password: "MARIADB_ROOT_PASSWORD", 
   database: "SensorFumaca"    
 });
 
