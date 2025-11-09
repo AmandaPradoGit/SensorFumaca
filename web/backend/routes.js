@@ -1,5 +1,5 @@
 import express from "express";
-import { listarAlertas, criarAlerta } from "../backend/alertaController.js";
+import { listarAlertas, criarAlerta } from "../backend/controller/alertaController.js";
 
 const router = express.Router();
 
