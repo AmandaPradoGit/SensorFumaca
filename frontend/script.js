@@ -1,7 +1,7 @@
 async function carregarAlertas() {
   try {
     // Faz uma requisição GET para o backend
-    const resposta = await fetch("http://localhost:3000/alertas");
+    const resposta = await fetch("http://localhost:3001/alertas");
     const dados = await resposta.json();
 
     const tbody = document.querySelector("#tabela tbody");
@@ -12,7 +12,9 @@ async function carregarAlertas() {
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td>${alerta.id}</td>
+        <td>${alerta.sensor}</td>
         <td>${new Date(alerta.data_hora).toLocaleString("pt-BR")}</td>
+        <td>${alerta.nivel}</td>
       `;
       tbody.appendChild(tr);
     });

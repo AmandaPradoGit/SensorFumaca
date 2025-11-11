@@ -1,20 +1,20 @@
-import mysql from "mysql2";
-
+import mysql from'mysql2'; 
 const db = mysql.createConnection({
-  host: "172.17.0.3",     
+  host: "127.0.0.1",     
   port: 3306,           
-  user: "user1232025",        
-  password: "MARIADB_ROOT_PASSWORD",
-  database: "SensorFumaca"    
+  user: "root",        
+  password: "Root123!",
+  database: "sensores"    
 });
 
 // Conexao
 db.connect((err) => {
   if (err) {
-    console.error("❌ Erro ao conectar no MariaDB:", err);
+    console.error("Erro ao conectar no MariaDB:", err);
     return;
   }
   console.log("Conectado ao MariaDB!");
 });
-
 export default db;
+
+

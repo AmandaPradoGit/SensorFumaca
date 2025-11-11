@@ -1,0 +1,23 @@
+{
+  "name": "projetoarduino",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "backend/server.js",
+  "scripts": {
+    "dev": "node backend/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@serialport/parser-readline": "^13.0.0",
+    "express": "^5.1.0",
+    "mysql2": "^3.15.2",
+    "nodemon": "^3.1.10",
+    "path": "^0.12.7",
+    "serialport": "^13.0.0",
+    "ws": "^8.18.3"
+  }
+}
