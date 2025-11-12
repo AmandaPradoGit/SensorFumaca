@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MQ-FIRE - Meus Locais</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+     <style>
+        :root {
+            --mq-red: #fb5757;
+        }
+        body {
+            background: #f3f3f3;
+        }
+    </style>
+</head>
+<body class="min-h-screen font-sans relative pb-16">
+
+    <main class="max-w-7xl mx-auto px-6 lg:px-12 pt-12 relative z-20">
+
+        <h1 class="text-4xl py-24 font-normal text-gray-800 tracking-tight mb-8">
+            Meus Sensores Cadastrados
+        </h1>
+        <a href="cadastrarSensores.html">+ Adicionar Sensor</a>
+        
+        
+        <div class="mb-6">
+            <p class="text-gray-600">Clique em um cartão para ver o status detalhado da sala.</p>
+        </div>
+
+        <div id="sensores-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Cards serão inseridos aqui via JavaScript -->
+        </div>
+    </main>
+    <script type="module" src="components/header.js"></script>
+    <script src="components/sensores.js"></script>
+</body>
+</html>
