@@ -1,28 +1,27 @@
 const express = require('express');
+const path = require('path');
 const app = express();
+const usuarioRoutes = require('./routes/usuarioRoutes');
 const userController = require('./controllers/userController');
+const pool = require('./config/db'); 
 
-// Middleware para processar dados do formulário
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static(__dirname)); // Para servir arquivos estáticos
+app.use(express.static(__dirname)); 
 
-// Rota raiz
+
 app.get('/', (req, res) => {
     res.redirect('/cadastro');
 });
 
-// Rota para a página de cadastro
 app.get('/cadastro', (req, res) => {
-    res.sendFile(__dirname + '/cadastro.html');
+    res.sendFile(path.join(__dirname, 'views', 'cadastro.html'));
 });
 
+app.use('/usuarios', usuarioRoutes);
 
-// Rotas de usuário
 app.post('/cadastro', userController.register);
-app.post('/login', userController.login);
 
-// Iniciar o servidor
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);

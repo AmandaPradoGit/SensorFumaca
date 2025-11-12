@@ -1,23 +1,26 @@
-const pool = require('../db');
+const usuarioModel = require('../model/usuarioModel');
 
 class UserController {
     async register(req, res) {
         try {
-            
             const { email, senha } = req.body;
             
-            // Validação básica
             if (!email || !senha) {
                 return res.status(400).json({ error: 'Email e senha são obrigatórios' });
             }
 
-            // Inserir usuário no banco de dados
-            const query = "INSERT INTO usuario (email, senha, dataCadastro) VALUES (?, ?, NOW())";
-            const [result] = await pool.execute(query, [email, senha]);
+            // Verificar se o email já existe
+            const usuarioExistente = await usuarioModel.buscarPorEmail(email);
+            if (usuarioExistente) {
+                return res.status(409).json({ error: 'Email já cadastrado' });
+            }
+
+            // Chamar o model para inserir o usuário
+            const userId = await usuarioModel.criar(email, senha);
             
             res.status(201).json({
                 message: 'Usuário cadastrado com sucesso',
-                userId: result.insertId
+                userId: userId
             });
         } catch (error) {
             console.error('Erro ao cadastrar usuário:', error);
@@ -34,17 +37,15 @@ class UserController {
                 return res.status(400).json({ error: 'Email e senha são obrigatórios' });
             }
 
-            // Verificar usuário no banco de dados
-            const query = "SELECT * FROM Usuario WHERE email = ? AND senha = ?";
-            const [rows] = await pool.execute(query, [email, senha]);
+            const usuario = await usuarioModel.verificarCredenciais(email, senha);
 
-            if (rows.length === 0) {
+            if (!usuario) {
                 return res.status(401).json({ error: 'Email ou senha inválidos' });
             }
 
             res.json({
                 message: 'Login realizado com sucesso',
-                userId: rows[0].id
+                userId: usuario.id
             });
         } catch (error) {
             console.error('Erro ao fazer login:', error);
