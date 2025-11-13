@@ -18,7 +18,7 @@ class UserController {
             // Chamar o model para inserir o usuário
             const userId = await usuarioModel.criar(email, senha);
             
-            res.redirect('../views/entrar.html');
+            res.redirect('/entrar');
         } catch (error) {
             console.error('Erro ao cadastrar usuário:', error);
             res.status(500).json({ error: 'Erro ao cadastrar usuário' });
@@ -40,7 +40,7 @@ class UserController {
                 return res.status(401).json({ error: 'Email ou senha inválidos' });
             }
 
-            res.redirect('sensores.html');
+            res.redirect('../views/sensores.html');
         } catch (error) {
             console.error('Erro ao fazer login:', error);
             res.status(500).json({ error: 'Erro ao fazer login' });

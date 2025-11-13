@@ -11,8 +11,7 @@ const __dirname = path.dirname(__filename);
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());  
-app.use(express.static(__dirname)); 
-
+app.use(express.static(path.join(__dirname)));
 
 app.get('/', (req, res) => {
     res.redirect('/cadastro');
@@ -22,8 +21,11 @@ app.get('/cadastro', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'views', 'cadastro.html'));
 });
 
-app.use('/usuarios', usuarioRoutes);
+app.get('/entrar', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'views', 'entrar.html'));
+});
 
+app.use('/usuarios', usuarioRoutes);
 app.post('/cadastro', userController.register);
 
 const PORT = 3000;
