@@ -14,6 +14,10 @@ class SensorModel {
         const [rows] = await pool.execute(query, [identificador]);
         return rows.length > 0 ? rows[0] : null;
     }
-    
+    async listarPorUsuario(usuarioId) {
+        const query = "SELECT * FROM sensores WHERE usuarioId = ?";
+        const [rows] = await pool.execute(query, [usuarioId]);
+        return rows;
+    }
 }
 export default new SensorModel();

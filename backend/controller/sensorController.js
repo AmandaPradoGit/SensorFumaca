@@ -28,8 +28,8 @@ class SensorController {
             res.status(500).json({ error: 'Erro ao cadastrar sensor' });
         }
     }
-    //para depois
-    /*async listar(req, res) {
+
+    async listar(req, res) {
         try {
             if (!req.session?.usuario) {
                 return res.status(401).json({ error: 'Não autorizado' });
@@ -40,6 +40,6 @@ class SensorController {
         } catch (error) {
             res.status(500).json({ error: 'Erro ao listar sensores' });
         }
-    }*/
+    }
 }
 export default new SensorController();
