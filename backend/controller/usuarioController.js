@@ -18,6 +18,11 @@ class UserController {
             // Chamar o model para inserir o usuário
             const userId = await usuarioModel.criar(email, senha);
             
+            req.session.usuario = {
+                id: userId,
+                email: email
+            };
+
             res.redirect('/entrar');
         } catch (error) {
             console.error('Erro ao cadastrar usuário:', error);
@@ -40,11 +45,24 @@ class UserController {
                 return res.status(401).json({ error: 'Email ou senha inválidos' });
             }
 
+            req.session.usuario = {
+                id: usuario.id,
+                email: usuario.email
+            };
+
             res.redirect('/sensores');
         } catch (error) {
             console.error('Erro ao fazer login:', error);
             res.status(500).json({ error: 'Erro ao fazer login' });
         }
+    }
+    logout(req, res) {
+        req.session.destroy((err) => {
+            if (err) {
+                return res.status(500).json({ error: 'Erro ao fazer logout' });
+            }
+            res.redirect('/entrar');
+        });
     }
 }
 

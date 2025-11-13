@@ -1,8 +1,9 @@
 import path from 'path';
 import express from 'express';
+import session from 'express-session';
 import usuarioRoutes from './routes.js';
 import userController from './controller/usuarioController.js';
-import pool from './config/db.js';
+import {autenticar} from './auth.js';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -12,6 +13,16 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());  
 app.use(express.static(path.join(__dirname, '..', 'views')));
+
+app.use(session({
+    secret: 'chavemuitoSecreta', 
+    resave: false,
+    saveUninitialized: false,
+    cookie: { 
+        secure: false,           
+        maxAge: 1000 * 60 * 60 * 24 //24 horas
+    }
+}));
 
 app.get('/', (req, res) => {
     res.redirect('/cadastro');
@@ -25,7 +36,7 @@ app.get('/entrar', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'views', 'entrar.html'));
 });
 
-app.get('/sensores', (req, res) => {
+app.get('/sensores', autenticar, (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'views', 'sensores.html'));
 });
 

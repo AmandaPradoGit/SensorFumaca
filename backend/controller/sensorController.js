@@ -1,6 +1,6 @@
-import sensorModel from '../model/sensorModel.js';
+import sensorModel from '../model/sensor.js';
 
-class UserController {
+class SensorController {
     async registerSensor(req, res) {
         try {
             const { chave_sensor, nome_sensor } = req.body;
@@ -25,3 +25,4 @@ class UserController {
         }
     }
 }
+export default new SensorController();

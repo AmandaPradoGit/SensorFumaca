@@ -14,4 +14,6 @@ class SensorModel {
         const [rows] = await pool.execute(query, [identificador]);
         return rows.length > 0 ? rows[0] : null;
     }
+    
 }
+export default new SensorModel();
