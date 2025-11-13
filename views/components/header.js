@@ -9,7 +9,7 @@ header.innerHTML = `
             <div class="flex items-center space-x-6 md:space-x-8">
           <a href="/dashboards" class="text-black hover:text-gray-700 text-sm md:text-base">Dashboard</a>
           <a href="/sensores" class="text-black hover:text-gray-700 text-sm md:text-base">Sensores</a>
-          <img src="imgs/profilepic.png" alt="Perfil" class="w-6 h-6 md:w-8 md:h-8 rounded-full" />
+          <img src="imgs/exit.png" alt="Logout" class="w-6 h-6 md:w-8 md:h-8 " />
         </div>
         </nav>
       </div>
@@ -18,11 +18,16 @@ header.innerHTML = `
   document.addEventListener('DOMContentLoaded', () => {
   document.body.prepend(header);
 
-  const profilePic = header.querySelector('img[alt="Perfil"]');
-  if (profilePic) {
-    profilePic.style.cursor = 'pointer'; 
-    profilePic.addEventListener('click', () => {
-      window.location.href = '/perfil';
+  const exitPic = header.querySelector('img[alt="Logout"]');
+  if (exitPic) {
+    exitPic.style.cursor = 'pointer'; 
+    exitPic.addEventListener('click', () => {
+        const form = Object.assign(document.createElement('form'), {
+            action: '/logout',
+            method: 'POST',
+            style: 'display:none'
+        });
+        document.body.appendChild(form).submit();
     });
   }
 

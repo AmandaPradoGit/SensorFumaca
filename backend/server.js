@@ -53,6 +53,14 @@ app.get('/dashboards', autenticar, (req, res) => {
 app.use('/usuarios', routes);
 app.use('/sensores', routes);
 
+app.post('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).json({ error: 'Erro ao fazer logout' });
+        }
+        res.redirect('/entrar');
+    });
+});
 app.post('/cadastro', userController.register);
 
 const PORT = 3000;

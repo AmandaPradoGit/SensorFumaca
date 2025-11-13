@@ -12,5 +12,4 @@ router.post('/login', (req, res) => userController.login(req, res));
 
 router.post('/registerSensor', (req, res) => sensorController.registerSensor(req,res));
 
-
 export default router;
