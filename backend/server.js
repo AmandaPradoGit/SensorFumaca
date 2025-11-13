@@ -1,7 +1,7 @@
 import path from 'path';
 import express from 'express';
 import session from 'express-session';
-import usuarioRoutes from './routes.js';
+import routes from './routes.js';
 import userController from './controller/usuarioController.js';
 import {autenticar} from './auth.js';
 import { fileURLToPath } from 'url';
@@ -50,7 +50,9 @@ app.get('/dashboards', autenticar, (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'views', 'dashboards.html'));
 });
 
-app.use('/usuarios', usuarioRoutes);
+app.use('/usuarios', routes);
+app.use('/sensores', routes);
+
 app.post('/cadastro', userController.register);
 
 const PORT = 3000;
