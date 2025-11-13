@@ -9,6 +9,17 @@ const pool = mysql.createPool({
     connectionLimit: 10,
     queueLimit: 0
 });
+/*
+const pool = mysql.createPool({
+  host: '172.30.0.17', //sla
+  user: 'root',
+  password: 'user1232025',
+  database: 'SensorFumaca',
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+});
+*/
 
 async function testConnection() {
   try {

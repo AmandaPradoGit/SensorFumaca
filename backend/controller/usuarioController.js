@@ -40,7 +40,7 @@ class UserController {
                 return res.status(401).json({ error: 'Email ou senha inválidos' });
             }
 
-            res.redirect('../views/sensores.html');
+            res.redirect('/sensores');
         } catch (error) {
             console.error('Erro ao fazer login:', error);
             res.status(500).json({ error: 'Erro ao fazer login' });

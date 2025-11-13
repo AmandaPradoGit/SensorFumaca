@@ -25,6 +25,10 @@ app.get('/entrar', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'views', 'entrar.html'));
 });
 
+app.get('/sensores', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'views', 'sensores.html'));
+});
+
 app.use('/usuarios', usuarioRoutes);
 app.post('/cadastro', userController.register);
 
