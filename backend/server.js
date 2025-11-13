@@ -10,8 +10,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());  
+
 app.use(express.static(path.join(__dirname, '..', 'views')));
 
 app.use(session({
@@ -38,6 +40,14 @@ app.get('/entrar', (req, res) => {
 
 app.get('/sensores', autenticar, (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'views', 'sensores.html'));
+});
+
+app.get('/cadastrarSensores', autenticar, (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'views', 'cadastrarSensores.html'));
+});
+
+app.get('/dashboards', autenticar, (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'views', 'dashboards.html'));
 });
 
 app.use('/usuarios', usuarioRoutes);
