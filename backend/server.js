@@ -27,12 +27,14 @@ app.post("/dados",async (req, res) => {
   });
 
 });
+// 👉 Diga ao Express para servir a pasta public:
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Página inicial (exemplo)
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/index.html"));
+  res.sendFile(path.join(__dirname, "../frontend", "index.html"));
 });
 
 app.use("/alertas", alertasRouter);
 
-app.listen(3001,'0.0.0.0',  () => console.log("Servidor rodando em http://localhost:3001"));
+app.listen(3001,'0.0.0.0', () => console.log("Servidor rodando em http://localhost:3001"));

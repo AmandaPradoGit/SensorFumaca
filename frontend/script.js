@@ -1,7 +1,7 @@
 async function carregarAlertas() {
   try {
     // Faz uma requisição GET para o backend
-    const resposta = await fetch("http://localhost:3001/alertas");
+    const resposta = await fetch("/alertas");
     const dados = await resposta.json();
 
     const tbody = document.querySelector("#tabela tbody");
