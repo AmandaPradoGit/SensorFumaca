@@ -1,11 +1,16 @@
 import pool from '../config/db.js';
+import bcrypt from 'bcrypt';
+
 
 class UsuarioModel {
     // Inserir novo usuário
     async criar(email, senha) {
-        const query = "INSERT INTO usuario (email, senha, dataCadastro) VALUES (?, ?, NOW())";
-        const [result] = await pool.execute(query, [email, senha]);
-        return result.insertId;
+    const saltRounds = 10; // custo do hash
+    const senhaHash = await bcrypt.hash(senha, saltRounds);
+
+    const query = "INSERT INTO usuario (email, senha, dataCadastro) VALUES (?, ?, NOW())";
+    const [result] = await pool.execute(query, [email, senhaHash]);
+    return result.insertId;
     }
 
     // Buscar usuário por email
@@ -23,10 +28,17 @@ class UsuarioModel {
     }
 
     async verificarCredenciais(email, senha) {
-        const query = "SELECT * FROM usuario WHERE email = ? AND senha = ?";
-        const [rows] = await pool.execute(query, [email, senha]);
-        return rows.length > 0 ? rows[0] : null;
-    }
+    const query = "SELECT * FROM usuario WHERE email = ?";
+    const [rows] = await pool.execute(query, [email]);
+
+    if (rows.length === 0) return null;
+
+    const usuario = rows[0];
+    const senhaValida = await bcrypt.compare(senha, usuario.senha);
+
+    return senhaValida ? usuario : null;
+}
+
 
     async listarTodos() {
         const query = "SELECT id, email, dataCadastro FROM usuario";
