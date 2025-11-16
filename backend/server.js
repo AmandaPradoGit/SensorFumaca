@@ -27,7 +27,7 @@ app.use(session({
 }));
 
 app.get('/', (req, res) => {
-    res.redirect('/cadastro');
+    res.redirect('/inicio');
 });
 
 app.get('/cadastro', (req, res) => {
@@ -35,6 +35,7 @@ app.get('/cadastro', (req, res) => {
 });
 
 app.post('/entrar', userController.login);
+
 app.get('/entrar', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'views', 'entrar.html'));
 });
@@ -50,6 +51,11 @@ app.get('/cadastrarSensores', autenticar, (req, res) => {
 app.get('/dashboards', autenticar, (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'views', 'dashboards.html'));
 });
+
+app.get('/inicio', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'views', 'inicio.html'));
+});
+
 
 app.use('/usuarios', routes);
 app.use('/sensores', routes);
