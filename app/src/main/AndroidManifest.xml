@@ -24,7 +24,8 @@
         <activity android:name=".EntrarActivity" />
         <activity android:name=".CadastroActivity" />
         <activity android:name=".SensoresActivity" />
-
+        <activity android:name=".CadastrarSensorActivity" />
+        <activity android:name=".VisualizacaoActivity" />" />
     </application>
 
 </manifest>

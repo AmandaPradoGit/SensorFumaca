@@ -11,6 +11,17 @@ class CadastrarSensorActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.cadastrarsensor)
+
+        val icon = findViewById<ImageView>(R.id.icon)
+        val btnCadastrar = findViewById<Button>(R.id.btnCadastrar)
+
+        icon.setOnClickListener {
+            val intent = Intent(this, SensoresActivity::class.java)
+            startActivity(intent)
+        }
+        btnCadastrar.setOnClickListener {
+            val intent = Intent(this, SensoresActivity::class.java)
+            startActivity(intent)
+        }
     }
-    
 }
