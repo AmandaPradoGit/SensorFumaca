@@ -1,10 +1,11 @@
-package com.example.mq_fire
+package com.example.mq_fire.ui
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
+import com.example.mq_fire.R
 
 
 class CadastrarSensorActivity : AppCompatActivity() {

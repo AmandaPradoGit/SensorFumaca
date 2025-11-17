@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MQFIRE">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,10 +24,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".EntrarActivity" />
-        <activity android:name=".CadastroActivity" />
-        <activity android:name=".SensoresActivity" />
-        <activity android:name=".CadastrarSensorActivity" />
+        <activity android:name=".ui.EntrarActivity" />
+        <activity android:name=".ui.CadastroActivity" />
+        <activity android:name=".ui.SensoresActivity" />
+        <activity android:name=".ui.CadastrarSensorActivity" />
 
     </application>
 

@@ -1,4 +1,4 @@
-package com.example.mq_fire
+package com.example.mq_fire.data.model
 
 data class Sensor(
     val id: String,

@@ -1,4 +1,4 @@
-package com.example.mq_fire
+package com.example.mq_fire.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,6 +9,9 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.mq_fire.R
+import com.example.mq_fire.data.api.RetrofitInstance
+import com.example.mq_fire.data.model.AuthRequest
 import kotlinx.coroutines.launch
 
 class CadastroActivity : AppCompatActivity() {
@@ -50,8 +53,6 @@ class CadastroActivity : AppCompatActivity() {
                 } catch (e: Exception) {
                     // ERRO!
                     Log.e("CadastroActivity", "Falha no registro: ${e.message}")
-                    // Você pode verificar o tipo de erro aqui para dar mensagens melhores
-                    // Por exemplo, se for um erro 409 (Conflict), significa que o email já existe.
                     Toast.makeText(this@CadastroActivity, "Falha no registro. O email pode já estar em uso.", Toast.LENGTH_LONG).show()
                 }
             }

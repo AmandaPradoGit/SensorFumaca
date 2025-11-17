@@ -1,4 +1,4 @@
-package com.example.mq_fire
+package com.example.mq_fire.data.api
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

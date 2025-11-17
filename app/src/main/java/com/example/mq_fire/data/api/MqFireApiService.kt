@@ -1,5 +1,8 @@
-package com.example.mq_fire
+package com.example.mq_fire.data.api
 
+import com.example.mq_fire.data.model.AuthRequest
+import com.example.mq_fire.data.model.Sensor
+import com.example.mq_fire.data.model.User
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST

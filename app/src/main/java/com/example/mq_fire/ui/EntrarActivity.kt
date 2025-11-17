@@ -1,4 +1,4 @@
-package com.example.mq_fire
+package com.example.mq_fire.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,6 +9,9 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.mq_fire.R
+import com.example.mq_fire.data.api.RetrofitInstance
+import com.example.mq_fire.data.model.AuthRequest
 import kotlinx.coroutines.launch
 
 class EntrarActivity : AppCompatActivity() {
@@ -50,7 +53,7 @@ class EntrarActivity : AppCompatActivity() {
                 } catch (e: Exception) {
                     // ERRO!
                     Log.e("EntrarActivity", "Falha no login: ${e.message}")
-                    // O erro 401 (Unauthorized) do seu servidor será pego aqui.
+
                     Toast.makeText(this@EntrarActivity, "Email ou senha inválidos.", Toast.LENGTH_LONG).show()
                 }
             }
