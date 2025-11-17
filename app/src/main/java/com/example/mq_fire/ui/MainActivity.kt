@@ -3,23 +3,25 @@ package com.example.mq_fire.ui
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.mq_fire.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        // --- VERIFICAÇÃO DE SESSÃO ---
+        val sharedPreferences = getSharedPreferences("user_session", MODE_PRIVATE)
+        val userId = sharedPreferences.getInt("USER_ID", -1) // Pega o ID, ou -1 se não encontrar
+
+        if (userId != -1) {
+            // Usuário já está logado, vá direto para a tela de sensores
+            val intent = Intent(this, SensoresActivity::class.java)
+            startActivity(intent)
+            finish()
+            return
         }
+        setContentView(R.layout.activity_main)
 
         val btnEntrar = findViewById<Button>(R.id.btnEntrar)
         val btnCadastro = findViewById<Button>(R.id.btnCadastro)

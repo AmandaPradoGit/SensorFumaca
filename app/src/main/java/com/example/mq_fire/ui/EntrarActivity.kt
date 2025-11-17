@@ -44,6 +44,12 @@ class EntrarActivity : AppCompatActivity() {
                 try {
                     val user = RetrofitInstance.api.login(request)
                     // SUCESSO!
+
+                    val sharedPreferences = getSharedPreferences("user_session", MODE_PRIVATE)
+                    val editor = sharedPreferences.edit()
+                    editor.putInt("USER_ID", user.id)
+                    editor.apply() // Salva o ID do usuário
+
                     Toast.makeText(this@EntrarActivity, "Bem-vindo, ${user.email}!", Toast.LENGTH_LONG).show()
 
                     val intent = Intent(this@EntrarActivity, SensoresActivity::class.java)
@@ -53,7 +59,6 @@ class EntrarActivity : AppCompatActivity() {
                 } catch (e: Exception) {
                     // ERRO!
                     Log.e("EntrarActivity", "Falha no login: ${e.message}")
-
                     Toast.makeText(this@EntrarActivity, "Email ou senha inválidos.", Toast.LENGTH_LONG).show()
                 }
             }
