@@ -28,11 +28,10 @@ class CadastrarSensorActivity : AppCompatActivity() {
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
             finish()
-            return // Impede a execução do resto do onCreate
+            return
         }
-        // --- FIM DA BARREIRA ---
 
-        // Apenas prossiga se o usuário estiver logado
+        // se o usuário estiver logado
         setContentView(R.layout.cadastrarsensor)
 
         val icon = findViewById<ImageView>(R.id.icon)
@@ -46,14 +45,14 @@ class CadastrarSensorActivity : AppCompatActivity() {
         }
 
         btnCadastrar.setOnClickListener {
-            val nomeSala = txtNomeSala.text.toString()
             val idSensor = txtIdSensor.text.toString()
+            val nomeSala = txtNomeSala.text.toString()
 
             if(nomeSala.isEmpty() || idSensor.isEmpty()){
                 Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            
+
             val request = Sensor(idSensor, nomeSala, userId)
 
             lifecycleScope.launch {
