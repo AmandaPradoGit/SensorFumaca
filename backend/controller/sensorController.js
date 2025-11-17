@@ -3,29 +3,46 @@ import sensorModel from '../model/sensor.js';
 class SensorController {
     async registerSensor(req, res) {
         try {
-            const { chave_sensor, nome_local } = req.body;
-            
-            if (!chave_sensor || !nome_local) {
-                return res.status(400).json({ error: 'Preencha todos os campos' });
+            //Aceita os nomes dos campos do site E do app.
+            const { chave_sensor, nome_local, idUsuario } = req.body;
+
+            const finalSensorId = chave_sensor;
+            const finalNomeSala = nome_local;
+
+            // Verifica se a requisição veio do app (que envia 'Content-Type: application/json')
+            const isApp = req.is('json');
+            const finalUsuarioId = isApp ? idUsuario : req.session?.usuario?.id;
+
+            // Validação com os dados unificados
+            if (!finalSensorId || !finalNomeSala || !finalUsuarioId) {
+                return res.status(400).json({ 
+                    error: 'Dados incompletos. É necessário ID do sensor, nome do local e ID do usuário.' 
+                });
             }
 
-            if (!req.session || !req.session.usuario) {
-                return res.status(401).json({ error: 'Usuário não autenticado' });
-            }
-            const usuarioId = req.session.usuario.id;
-
-            const sensorExistente = await sensorModel.buscarPorIdentificador(chave_sensor);
+            const sensorExistente = await sensorModel.buscarPorIdentificador(finalSensorId);
             if (sensorExistente) {
-                return res.status(409).json({ error: 'Sensor já cadastrado' });
+                return res.status(409).json({ error: 'Sensor com este ID já cadastrado' });
             }
 
-            // Chamar o model para inserir o sensor
-            const sensorId = await sensorModel.criar(chave_sensor, nome_local, usuarioId);
+            await sensorModel.criar(finalSensorId, finalNomeSala, finalUsuarioId);
             
-            res.redirect('/sensores');
+            if (isApp) {
+                // Para o Android, responda com JSON.
+                const novoSensor = { 
+                    id: finalSensorId, 
+                    nomeSala: finalNomeSala, // Usando os nomes que o app espera na resposta
+                    idUsuario: finalUsuarioId 
+                };
+                return res.status(201).json(novoSensor);
+            } else {
+                // Para o site, redirecione.
+                return res.redirect('/sensores');
+            }
+
         } catch (error) {
             console.error('Erro ao cadastrar sensor:', error);
-            res.status(500).json({ error: 'Erro ao cadastrar sensor' });
+            res.status(500).json({ error: 'Erro interno ao cadastrar sensor' });
         }
     }
 
@@ -34,7 +51,6 @@ class SensorController {
             if (!req.session?.usuario) {
                 return res.status(401).json({ error: 'Não autorizado' });
             }
-
             const sensores = await sensorModel.listarPorUsuario(req.session.usuario.id);
             res.json(sensores);
         } catch (error) {
@@ -42,4 +58,5 @@ class SensorController {
         }
     }
 }
+
 export default new SensorController();
