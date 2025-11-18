@@ -15,14 +15,22 @@ class SensorController {
 
             // Validação com os dados unificados
             if (!finalSensorId || !finalNomeSala || !finalUsuarioId) {
-                return res.status(400).json({ 
+                  if (req.is('json')) {
+                     return res.status(400).json({ 
                     error: 'Dados incompletos. É necessário ID do sensor, nome do local e ID do usuário.' 
                 });
+                }
+                return res.redirect('/cadastrarSensores?erro=Preencha todos os campos');
             }
 
             const sensorExistente = await sensorModel.buscarPorIdentificador(finalSensorId);
             if (sensorExistente) {
-                return res.status(409).json({ error: 'Sensor com este ID já cadastrado' });
+                if (req.is('json')) {
+                     return res.status(400).json({ 
+                    error: 'Sensor com esse ID já cadastrado.' 
+                });
+                }
+                return res.redirect('/cadastrarSensores?erro=Sensor com esse ID já cadastrado');
             }
 
             await sensorModel.criar(finalSensorId, finalNomeSala, finalUsuarioId);
@@ -41,8 +49,12 @@ class SensorController {
             }
 
         } catch (error) {
-            console.error('Erro ao cadastrar sensor:', error);
-            res.status(500).json({ error: 'Erro interno ao cadastrar sensor' });
+            if (req.is('json')) {
+                     return res.status(400).json({ 
+                    error: 'Erro ao cadastrar sensor.' 
+                });
+                }
+                return res.redirect('/cadastrarSensores?err0r=Erro ao cadastrar sensor');
         }
     }
 

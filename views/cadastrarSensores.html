@@ -34,6 +34,8 @@
         <form method="POST" action="/sensores/registerSensor"  id="formCadastroSensor">
             
             <div class="mb-4">
+                <div id="erro" style="color:red; font-weight:bold;"></div>
+
                 <label for="nome_local" class="block text-base font-medium text-gray-700 mb-1">
                     Nome da Sala / Local:
                 </label>
@@ -61,6 +63,16 @@
         </form>
 
     </div>
+     <script>
+    const params = new URLSearchParams(window.location.search);
+    const erro = params.get('erro');
 
+    if (erro) {
+        const divErro = document.getElementById("erro");
+        if (divErro) {
+            divErro.innerText = erro;
+        }
+    }
+    </script>
 </body>
 </html>

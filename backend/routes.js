@@ -12,6 +12,10 @@ router.post('/login', (req, res) => userController.login(req, res));
 
 router.post('/registerSensor', (req, res) => sensorController.registerSensor(req,res));
 
+router.get('/cadastrarSensores', (req, res) => {
+    res.sendFile('cadastrarSensores.html', { root: 'public' }); 
+});
+
 router.get('/entrar', (req, res) => {
     res.sendFile('entrar.html', { root: 'public' }); 
 });
