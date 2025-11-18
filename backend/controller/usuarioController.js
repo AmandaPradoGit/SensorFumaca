@@ -9,12 +9,20 @@ class UserController {
             const password = senha || pass;
 
             if (!email || !password) {
-                return res.status(400).json({ error: 'Email e senha são obrigatórios' });
+                if (req.is('json')) {
+                return res.status(400).json({ error: 'Preencha todos os campos' });
+                }
+
+                return res.redirect('/cadastro?erro=Preencha todos os campos');
             }
 
             const usuarioExistente = await usuarioModel.buscarPorEmail(email);
+
             if (usuarioExistente) {
+                if (req.is('json')) {
                 return res.status(409).json({ error: 'Email já cadastrado' });
+                }
+                return res.redirect('/cadastro?erro=Email já cadastrado');
             }
 
             const userId = await usuarioModel.criar(email, password);
@@ -35,8 +43,10 @@ class UserController {
             }
 
         } catch (error) {
-            console.error('Erro ao cadastrar usuário:', error);
-            res.status(500).json({ error: 'Erro ao cadastrar usuário' });
+            if (req.is('json')) {
+                return res.status(500).json({ error: 'Erro ao cadastrar usuário' });
+            }
+                return res.redirect('/cadastro?erro=Erro interno ao fazer o cadastro!');
         }
     }
 
@@ -46,12 +56,23 @@ class UserController {
             const password = senha || pass;
 
             if (!email || !password) {
+                if (req.is('json')) {
                 return res.status(400).json({ error: 'Email e senha são obrigatórios' });
+                }
+
+                return res.redirect('/entrar?erro=Email e senha são obrigatórios!');
+
             }
 
             const usuario = await usuarioModel.verificarCredenciais(email, password);
-            if (!usuario) {
-                return res.status(401).json({ error: 'Email ou senha inválidos' });
+             if (!usuario) {
+
+                if (req.is('json')) {
+                    return res.status(401).json({ error: 'Email ou senha inválidos' });
+                }
+
+                return res.redirect('/entrar?erro=Email ou senha inválidos!');
+
             }
 
             if (req.is('json')) {
@@ -72,7 +93,13 @@ class UserController {
 
         } catch (error) {
             console.error('Erro ao fazer login:', error);
-            res.status(500).json({ error: 'Erro ao fazer login' });
+
+            if (req.is('json')) {
+                return res.status(500).json({ error: 'Erro ao fazer login' });
+            }
+
+            return res.redirect('/entrar?erro=Erro interno ao fazer o cadastro!');
+
         }
     }
 
@@ -83,5 +110,6 @@ class UserController {
         });
     }
 }
+
 
 export default new UserController();
