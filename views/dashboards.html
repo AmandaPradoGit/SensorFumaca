@@ -102,12 +102,14 @@
         <!-- Calendário -->
         <div id="calendario" class="bg-white shadow rounded-lg p-6 w-[500px] h-[500px] max-w-md mx-auto">
             
-            <button class="mt-16 w-full bg-[var(--mq-red)] text-white py-2 rounded hover:bg-red-600 transition">
-            Importar Tabela de alertas
+            <button id="btnExport" class="mt-16 w-full bg-[var(--mq-red)] text-white py-2 rounded hover:bg-red-600 transition">
+            Exportar Tabela de alertas
             </button>
         </div>
         </div>
   </main>
+
+
   <!-- Calendario -->
    <script>
   document.addEventListener('DOMContentLoaded', function () {
@@ -124,6 +126,34 @@
     });
     calendar.render();
   });
+</script>
+
+<!--Exportação da tabela para excel-->
+
+<script>
+document.getElementById("btnExport").addEventListener("click", function () {
+    // Tabela de teste temporaria
+    const tableHTML = `
+        <table border="1">
+            <tr><th>Nome</th><th>Idade</th></tr>
+            <tr><td>Ana</td><td>25</td></tr>
+            <tr><td>João</td><td>30</td></tr>
+        </table>
+    `;
+
+    // Criar Blob com tipo Excel
+    const blob = new Blob([tableHTML], { type: "application/vnd.ms-excel" });
+
+    // Criar link para download
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "dados.xls"; // Nome do arquivo
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+});
 </script>
 
  <script type="module" src="components/header.js"></script>
