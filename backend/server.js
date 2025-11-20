@@ -34,8 +34,6 @@ app.get('/cadastro', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'views', 'cadastro.html'));
 });
 
-app.post('/entrar', userController.login);
-
 app.get('/entrar', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'views', 'entrar.html'));
 });
@@ -56,9 +54,9 @@ app.get('/inicio', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'views', 'inicio.html'));
 });
 
-
+app.post('/entrar', userController.login);
 app.use('/usuarios', routes);
-app.use('/sensores', routes);
+app.use('/api/sensores', routes);
 
 app.post('/logout', (req, res) => {
     req.session.destroy((err) => {

@@ -11,6 +11,7 @@ router.post('/register', (req, res) => userController.register(req, res));
 router.post('/login', (req, res) => userController.login(req, res));
 
 router.post('/registerSensor', (req, res) => sensorController.registerSensor(req,res));
+router.get('/', sensorController.listar);
 
 router.get('/cadastrarSensores', (req, res) => {
     res.sendFile('cadastrarSensores.html', { root: 'public' }); 
