@@ -76,5 +76,19 @@
         </div>
     </main>
     <script type="module" src="components/header.js"></script>
-    </body>
+    <script type="module">
+    import { carregarSensor, carregarAlertas } from "./components/tabelas.js";
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const params = new URLSearchParams(window.location.search);
+        const sensorId = params.get("local_id");
+        if (!sensorId) {
+            console.error("Nenhum ID recebido!");
+            return;
+        }
+        carregarSensor(sensorId);
+        carregarAlertas(sensorId);
+    });
+</script>
+</body>
 </html>

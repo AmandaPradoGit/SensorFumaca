@@ -19,5 +19,11 @@ class SensorModel {
         const [rows] = await pool.execute(query, [usuarioId]);
         return rows;
     }
+
+    async buscarAlertasPorSensor(sensorId) {
+        const query = "SELECT * FROM alertas WHERE sensor = ? ORDER BY data_hora DESC";
+        const [rows] = await pool.execute(query, [sensorId]);
+        return rows;
+    }
 }
 export default new SensorModel();
