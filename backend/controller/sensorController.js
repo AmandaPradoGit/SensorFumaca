@@ -69,6 +69,21 @@ class SensorController {
             res.status(500).json({ error: 'Erro ao listar sensores' });
         }
     }
+    async listarComAlertas(req, res) {
+        try {
+            const isApp = req.is('json');
+            const usuarioId = isApp ? req.body?.idUsuario : req.session?.usuario?.id;
+
+            if (!usuarioId) {
+                return res.status(401).json({ error: 'Usuário não identificado' });
+            }
+
+            const sensoresComAlertas = await sensorModel.listarSensoresComAlertas(usuarioId);
+            res.json(sensoresComAlertas);
+        } catch (error) {
+            res.status(500).json({ error: 'Erro ao listar sensores com alertas' });
+        }
+    }
 }
 
 export default new SensorController();

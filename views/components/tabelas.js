@@ -1,64 +1,46 @@
-async function carregarAlertas() {
-  try {
-    // Faz uma requisição GET para o backend
-    const resposta = await fetch("http://localhost:3000/alertas");
-    const dados = await resposta.json();
+export async function carregarSensor(sensorId) {
+    try {
+        const resp = await fetch(`/api/sensores/${sensorId}`);
+        const sensor = await resp.json();
+      
+        document.getElementById("sala-nome").textContent = sensor.nome;
+  
+        document.getElementById("nivel-fumaca").textContent = sensor.nivel;
 
-    const tbody = document.querySelector("#tabela tbody");
-    tbody.innerHTML = "";
+        const statusBolinha = document.getElementById("status-bolinha");
+        const statusTexto = document.getElementById("status-texto");
 
-    // Preenche a tabela com os dados
-    dados.forEach(alerta => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${alerta.id}</td>
-        <td>${new Date(alerta.data_hora).toLocaleString("pt-BR")}</td>
-      `;
-      tbody.appendChild(tr);
-    });
-  } catch (err) {
-    console.error("Erro ao carregar alertas:", err);
-  }
+        if (sensor.nivel > 200) {
+            statusBolinha.className = "w-6 h-6 rounded-full bg-red-500";
+            statusTexto.textContent = "Alerta";
+            statusTexto.className = "text-xl text-red-500 font-medium";
+        } else {
+            statusBolinha.className = "w-6 h-6 rounded-full bg-green-500";
+            statusTexto.textContent = "Estável";
+            statusTexto.className = "text-xl text-gray-700 font-medium";
+        }
+    } catch (erro) {
+        console.error("Erro ao carregar sensor:", erro);
+    }
 }
 
-// Atualizar ao abrir a página
-carregarAlertas();
-
-// Botão para atualizar manualmente
-document.getElementById("atualizar").addEventListener("click", carregarAlertas);
-
-// Função para carregar dados do sensor na visualização
-export async function carregarSensor(id) {
-  try {
-    const resposta = await fetch(`/api/sensores/${id}`);
-    if (!resposta.ok) throw new Error("Erro ao carregar sensor.");
-    const sensor = await resposta.json();
-    document.getElementById("nome-sala").innerText = sensor.nomeSala;
-    document.getElementById("ppm-atual").innerText = sensor.leituraPPM || "---";
-    document.getElementById("status-indicador").innerText = sensor.status || "Desconhecido";
-  } catch (erro) {
-    document.getElementById("nome-sala").innerText = "ERRO";
-    document.getElementById("ppm-atual").innerText = "---";
-    document.getElementById("status-indicador").innerText = "Falha";
-  }
-}
-
-// Função para carregar alertas do sensor na visualização
 export async function carregarAlertas(sensorId) {
-  try {
-    const resposta = await fetch(`/api/alertas?sensor_id=${sensorId}`);
-    if (!resposta.ok) throw new Error("Erro ao carregar alertas.");
-    const alertas = await resposta.json();
-    const tabela = document.getElementById("tabela-alertas");
-    tabela.innerHTML = alertas.map(alerta => `
-      <tr>
-        <td>${alerta.id}</td>
-        <td>${alerta.nivel}</td>
-        <td>${alerta.data_hora}</td>
-      </tr>
-    `).join('');
-  } catch (erro) {
-    document.getElementById("tabela-alertas").innerHTML = 
-      '<tr><td colspan="3">Erro ao carregar alertas.</td></tr>';
-  }
+    try {
+        const resp = await fetch(`/api/alertas/${sensorId}`);
+        const alertas = await resp.json();
+
+        const tbody = document.getElementById("alertas-tabela");
+        tbody.innerHTML = alertas.map(a => `
+            <tr class="text-gray-700 text-sm md:text-base">
+                <td class="py-2 pr-4">${a.id}</td>
+                <td class="py-2 px-4 ${a.nivel > 200 ? 'text-red-500' : 'text-green-500'} font-medium">
+                    ${a.nivel > 200 ? 'Alerta' : 'Estável'}
+                </td>
+                <td class="py-2 pl-4">${new Date(a.dataHora).toLocaleString()}</td>
+            </tr>
+        `).join('');
+    } catch (erro) {
+        console.error("Erro ao carregar alertas:", erro);
+    }
 }
+

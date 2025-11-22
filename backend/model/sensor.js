@@ -25,5 +25,21 @@ class SensorModel {
         const [rows] = await pool.execute(query, [sensorId]);
         return rows;
     }
+    async listarSensoresComAlertas(usuarioId) {
+        const query = `
+            SELECT s.nomeSala,
+                   s.identificador,
+                   a.valor,
+                   a.nivel,
+                   a.data_hora
+            FROM sensores s
+            LEFT JOIN alertas a
+                   ON s.identificador = a.sensor
+            WHERE s.usuarioId = ?
+            ORDER BY s.nomeSala ASC, a.data_hora DESC
+        `;
+        const [rows] = await pool.execute(query, [usuarioId]);
+        return rows;
+    }
 }
 export default new SensorModel();
