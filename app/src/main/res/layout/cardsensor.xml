@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="@color/white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp">
+
+        <!-- Barra Colorida Superior (Muda de cor via código) -->
+        <View
+            android:id="@+id/viewStatusColor"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            android:background="#4CAF50"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Nome da Sala -->
+        <TextView
+            android:id="@+id/txtNomeSala"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Cozinha"
+            android:textColor="#333333"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewStatusColor" />
+
+        <!-- Bolinha de Status -->
+        <View
+            android:id="@+id/dotStatus"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/circle_shape"
+            android:backgroundTint="#4CAF50"
+            app:layout_constraintBottom_toBottomOf="@+id/txtStatusTexto"
+            app:layout_constraintEnd_toStartOf="@+id/txtStatusTexto"
+            app:layout_constraintTop_toTopOf="@+id/txtStatusTexto" />
+
+        <TextView
+            android:id="@+id/txtStatusTexto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="Estável"
+            android:textColor="#4CAF50"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/txtNomeSala"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/txtNomeSala" />
+
+        <!-- ID do Sensor -->
+        <TextView
+            android:id="@+id/txtSensorId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Sensor MQ-2: MQFIRE-001"
+            android:textColor="#666666"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/txtNomeSala"
+            app:layout_constraintTop_toBottomOf="@+id/txtNomeSala" />
+
+        <!-- Leitura Atual -->
+        <TextView
+            android:id="@+id/lblLeitura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Leitura Atual: "
+            android:textColor="#666666"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/txtNomeSala"
+            app:layout_constraintTop_toBottomOf="@+id/txtSensorId" />
+
+        <TextView
+            android:id="@+id/txtLeituraValor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="25 PPM"
+            android:textColor="#4CAF50"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/lblLeitura"
+            app:layout_constraintStart_toEndOf="@+id/lblLeitura"
+            app:layout_constraintTop_toTopOf="@+id/lblLeitura" />
+
+        <!-- Última Leitura -->
+        <TextView
+            android:id="@+id/txtUltimaLeitura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Última leitura: agora"
+            android:textColor="#666666"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/txtNomeSala"
+            app:layout_constraintTop_toBottomOf="@+id/lblLeitura" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

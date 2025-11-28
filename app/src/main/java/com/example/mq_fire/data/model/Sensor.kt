@@ -11,5 +11,11 @@ data class Sensor(
     val nomeSala: String,
 
     @SerializedName("idUsuario")
-    val idUsuario: Int
+    val idUsuario: Int,
+
+    @SerializedName("leitura_atual")
+    val leituraAtual: Int = 0, // Ex: 25
+
+    @SerializedName("status")
+    val status: String = "Estável"
 )

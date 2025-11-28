@@ -18,6 +18,10 @@ interface MqFireApiService {
     suspend fun register(@Body request: AuthRequest): User
 
     // --- Rotas de Sensor ---
-    @POST("sensores/registerSensor") // Rota corrigida para corresponder ao routes.js
+    @POST("api/sensores/registerSensor") 
     suspend fun cadastrarSensor(@Body sensor: Sensor): Sensor
+
+    // Para buscar um sensor, se precisar no futuro, certifique-se que o routes.js tenha router.get('/:id')
+    @GET("api/sensores/{id}")
+    suspend fun getSensorStatus(@Path("id") sensorId: String): Sensor
 }
