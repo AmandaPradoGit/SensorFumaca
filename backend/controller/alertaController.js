@@ -1,16 +1,29 @@
 import { getAlertas, addAlerta } from "../model/alertaModel.js";
 
-export function listarAlertas(req, res) {
-  getAlertas((err, results) => {
-    if (err) return res.status(500).send("Erro ao buscar alertas");
-    res.json(results);
-  });
+export async function listarAlertas(req, res) {
+  try {
+    const usuarioId = req.params.usuarioId;
+    const alertas = await getAlertas(usuarioId);
+    res.json(alertas);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ erro: "Erro ao listar alertas" });
+  }
 }
 
-export function criarAlerta(req, res) {
-  const { mensagem } = req.body;
-  addAlerta(mensagem, (err) => {
-    if (err) return res.status(500).send("Erro ao salvar alerta");
-    res.status(201).send("Alerta salvo com sucesso!");
-  });
+export async function criarAlerta(req, res) {
+  try {
+    const { sensor, valor, nivel } = req.body;
+
+    if (!sensor || !valor || !nivel) {
+      return res.status(400).json({ erro: "Dados incompletos" });
+    }
+
+    await addAlerta(sensor, valor, nivel);
+    res.status(201).json({ mensagem: "Alerta salvo com sucesso!" });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ erro: "Erro ao registrar alerta" });
+  }
 }

@@ -9,7 +9,7 @@ class SensorController {
                 return res.status(400).json({ error: 'Preencha todos os campos' });
             }
 
-            if (!req.session || !req.session.usuario) {
+            if (!req.session || !req.session.usuario.id) {
                 return res.status(401).json({ error: 'Usuário não autenticado' });
             }
             const usuarioId = req.session.usuario.id;

@@ -1,4 +1,4 @@
-async function carregarAlertas() {
+/*async function carregarAlertas() {
   try {
     // Faz uma requisição GET para o backend
     const resposta = await fetch("http://localhost:3000/alertas");
@@ -11,8 +11,10 @@ async function carregarAlertas() {
     dados.forEach(alerta => {
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td>${alerta.id}</td>
+           <td>${alerta.id}</td>
+        <td>${alerta.sensor}</td>
         <td>${new Date(alerta.data_hora).toLocaleString("pt-BR")}</td>
+        <td>${alerta.nivel}</td>
       `;
       tbody.appendChild(tr);
     });
@@ -26,3 +28,4 @@ carregarAlertas();
 
 // Botão para atualizar manualmente
 document.getElementById("atualizar").addEventListener("click", carregarAlertas);
+*/
