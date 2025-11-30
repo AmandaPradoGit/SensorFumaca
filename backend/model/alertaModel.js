@@ -98,8 +98,6 @@ export async function listarComUltimaLeitura(usuarioId) {
 
   const [rows] = await pool.execute(query, [usuarioId]);
   return rows;
-
-  
 }
 export async function listarPorData(usuarioId, data) {
   const query = `

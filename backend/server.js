@@ -72,8 +72,12 @@ app.post('/entrar', userController.login);
 app.use('/usuarios', usuarioRouter);
 app.use('/sensores', sensorRouter);
 
-app.get('/api/sensores', autenticar, async (req, res) => {
-  const usuarioId = req.session.usuario.id;
+app.get('/api/sensores', async (req, res) => {
+  const usuarioId = req.query.idUsuario || req.session?.usuario?.id;
+
+   if (!usuarioId) {
+      return res.status(401).json({ erro: 'Usuário não identificado' });
+  }
 
   try {
     const sensores = await alertaModel.listarComUltimaLeitura(usuarioId);
@@ -81,6 +85,47 @@ app.get('/api/sensores', autenticar, async (req, res) => {
   } catch (err) {
     console.error("ERRO EM /api/sensores:", err);
     res.status(500).json({ erro: 'Erro ao buscar sensores' });
+  }
+});
+
+// --- ROTA PARA BUSCAR UM ÚNICO SENSOR (COM ÚLTIMA LEITURA) ---
+app.get('/api/sensores/:id', async (req, res) => {
+  const sensorId = req.params.id;
+
+  try {
+    // 1. Busca os dados básicos do sensor
+    const sensor = await sensorModel.buscarPorIdentificador(sensorId);
+
+    if (!sensor) {
+      return res.status(404).json({ erro: 'Sensor não encontrado' });
+    }
+
+    // 2. VAI BUSCAR OS ALERTAS/LEITURAS DESSE SENSOR
+    // Usa a função que você já importou: alertaModel
+    // Supondo que sensor.identificador seja a chave que liga com a tabela de alertas
+    const alertas = await alertaModel.listarPorSensor(sensor.identificador); 
+    
+    // 3. Se tiver alertas, pega o mais recente e adiciona ao objeto sensor
+    if (alertas && alertas.length > 0) {
+        const ultimo = alertas[0]; // Assume que a lista vem ordenada por data DESC (do mais novo pro mais antigo)
+        
+        // Adiciona os campos que o Android espera (conforme configuramos no Sensor.kt)
+        sensor.valor = ultimo.valor;         // Android lê como 'leitura_atual'
+        sensor.nivel = ultimo.nivel;         // Android lê como 'status'
+        sensor.data_hora = ultimo.data_hora; // Android lê como 'data_hora'
+    } else {
+        // Se não tiver leitura, define valores padrão
+        sensor.valor = 0;
+        sensor.nivel = "Sem dados";
+        sensor.data_hora = null;
+    }
+
+    // 4. Agora sim, envia o sensor COMPLETO com a leitura
+    res.json(sensor);
+
+  } catch (err) {
+    console.error("ERRO EM /api/sensores/:id", err);
+    res.status(500).json({ erro: 'Erro ao buscar detalhes do sensor' });
   }
 });
 

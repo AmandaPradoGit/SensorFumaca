@@ -3,7 +3,7 @@ import sensorModel from '../model/sensor.js';
 class SensorController {
     async registerSensor(req, res) {
         try {
-            const { chave_sensor, nome_local } = req.body;
+            const { chave_sensor, nome_local, idUsuario } = req.body;
             
              const finalSensorId = chave_sensor;
             const finalNomeSala = nome_local;
@@ -36,8 +36,8 @@ class SensorController {
             if (isApp) {
                 // Para o Android, responda com JSON.
                 const novoSensor = { 
-                    id: finalSensorId, 
-                    nomeSala: finalNomeSala, // Usando os nomes que o app espera na resposta
+                    chave_sensor: finalSensorId, 
+                    nome_local: finalNomeSala, 
                     idUsuario: finalUsuarioId 
                 };
                 return res.status(201).json(novoSensor);
@@ -58,15 +58,21 @@ class SensorController {
 
     async listar(req, res) {
         try {
-            if (!req.session?.usuario) {
-                return res.status(401).json({ error: 'Não autorizado' });
+            const idUsuario = req.query.idUsuario || req.session?.usuario?.id;
+
+            if (!idUsuario) {
+                return res.status(401).json({ error: 'Não autorizado / Usuário não identificado' });
             }
 
-            const sensores = await sensorModel.listarPorUsuario(req.session.usuario.id);
+            const sensores = await sensorModel.listarPorUsuario(idUsuario);
+            
             res.json(sensores);
+            
         } catch (error) {
+            console.error('Erro ao listar:', error);
             res.status(500).json({ error: 'Erro ao listar sensores' });
         }
     }
 }
+
 export default new SensorController();
