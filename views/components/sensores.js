@@ -178,74 +178,95 @@ function criarCardSensor(sensor) {
 
 async function carregarHistorico() {
     const params = new URLSearchParams(window.location.search);
-
-    // Ajuste: tente vários nomes comuns, para robustez
     const sensorId = params.get("local_id") || params.get("sensor") || params.get("id");
 
     if (!sensorId) {
-        console.error("Nenhum sensor enviado na URL (esperado local_id, sensor ou id). URL:", window.location.search);
+        console.error("Nenhum sensor enviado na URL. URL:", window.location.search);
         return;
     }
 
-    // Seletores por id (mais confiáveis)
-    const tabelaBody = document.querySelector("#tbody");
-    const tituloSala = document.querySelector("#titulo-sala");
+    // seletores (confirme que estes ids existem no HTML)
+    const tabelaBody = document.querySelector("#tbody") || document.querySelector("#historico-body");
+    const tituloSala = document.querySelector("#titulo-sala") || document.querySelector("#titulo-sensor");
     const valorAtualDiv = document.querySelector("#valor-atual");
-    const valorDatahora = document.querySelector("#valor-datahora");
+    const valorDatahora = document.querySelector("#valor-datahora") || null;
 
-    if (!tabelaBody || !tituloSala || !valorAtualDiv || !valorDatahora) {
-        console.error("Elementos da página não encontrados. Verifique ids #tbody, #titulo-sala,#valor-datahora e #valor-atual.");
+    if (!tabelaBody || !tituloSala || !valorAtualDiv) {
+        console.error("Elementos da página não encontrados. IDs esperados: #tbody (ou #historico-body), #titulo-sala (ou #titulo-sensor), #valor-atual");
         return;
     }
 
     try {
-        // 1. Buscar histórico - ajuste do nome do query param dependendo do backend
-        const resposta = await fetch(`/api/alertas?sensorId=${encodeURIComponent(sensorId)}`);
+        // buscar histórico
+        const resposta = await fetch(`/api/alertas?sensorId=${encodeURIComponent(sensorId)}`, { credentials: "include" });
 
         if (!resposta.ok) {
-            console.error("Erro na resposta da API:", resposta.status, await resposta.text());
-            tabelaBody.innerHTML = `<tr><td colspan="3" class="py-4 text-red-500 text-center">Erro ao buscar histórico (${resposta.status})</td></tr>`;
+            console.error("Erro na resposta da API (histórico):", resposta.status, await resposta.text());
+            tabelaBody.innerHTML = `<tr><td colspan="4" class="py-4 text-red-500 text-center">Erro ao buscar histórico (${resposta.status})</td></tr>`;
             return;
         }
 
         const dados = await resposta.json();
 
-        // Certifique-se que é array
+        // se não tem alertas, busca nome do sensor e atualiza título, mostra mensagem amigável
         if (!Array.isArray(dados) || dados.length === 0) {
-            tabelaBody.innerHTML = `<tr><td colspan="3" class="py-4 text-gray-500 text-center">Nenhum alerta registrado</td></tr>`;
-            // também atualiza valor atual se desejar limpar
+            // tenta buscar meta do sensor
+            try {
+                const r2 = await fetch(`/sensores/${encodeURIComponent(sensorId)}`, { credentials: "include" });
+                if (r2.ok) {
+                    const sensorInfo = await r2.json();
+                    // atualizar título com nome da sala (ou identificador se nome faltar)
+                    const salaNome = sensorInfo.nomeSala || sensorInfo.identificador || sensorId;
+                    tituloSala.innerHTML = `Status do<br>Sensor ${sensorId} (${salaNome})`;
+                } else {
+                    // se não achou, apenas coloca identificador
+                    tituloSala.innerHTML = `Status do<br>Sensor ${sensorId}`;
+                }
+            } catch (errSensor) {
+                // erro ao buscar sensor -> mesmo assim atualiza com identificador
+                tituloSala.innerHTML = `Status do<br>Sensor ${sensorId}`;
+                console.warn("Não foi possível buscar info do sensor:", errSensor);
+            }
+
+            tabelaBody.innerHTML = `<tr><td colspan="4" class="py-4 text-gray-500 text-center">Nenhum alerta registrado</td></tr>`;
             valorAtualDiv.textContent = "-";
+            if (valorDatahora) valorDatahora.textContent = "-";
             return;
         }
 
-        // 2. Atualizar título
-        tituloSala.innerHTML = `Status do<br>Sensor ${sensorId ?? dados[0].sensor} - ${dados[0].sala ?? ""}`;
+        // existem alertas -> preencher normalmenteconst r2 = await fetch(`/sensores/${encodeURIComponent(sensorId)}`, { credentials: "include" });
+               const r2 = await fetch(`/sensores/${encodeURIComponent(sensorId)}`, { credentials: "include" });
+                if (r2.ok) {
+                    const sensorInfo = await r2.json();
+                    // atualizar título com nome da sala (ou identificador se nome faltar)
+                    const salaNome = sensorInfo.nomeSala || sensorInfo.identificador || sensorId;
+                    tituloSala.innerHTML = `Status do<br>Sensor ${sensorId} (${salaNome})`;
+                } else {
+                    // se não achou, apenas coloca identificador
+                    tituloSala.innerHTML = `Status do<br>Sensor ${sensorId}`;
+                }
 
-        // 3. Atualizar leitura atual (primeiro alerta da lista)
-        // segurando que dados[0].valor exista
         valorAtualDiv.textContent = dados[0].valor ?? "-";
-        valorDatahora.textContent = new Date(dados[0].data_hora).toLocaleString("pt-BR")  ?? "-";
+        if (valorDatahora) valorDatahora.textContent = dados[0].data_hora ? new Date(dados[0].data_hora).toLocaleString("pt-BR") : "-";
 
-        // 4. Preencher tabela
         tabelaBody.innerHTML = dados.map(alerta => `
             <tr class="text-gray-700 text-sm md:text-base">
                 <td class="py-2 pr-4">${alerta.id ?? "-"}</td>
-                <td class="py-2 px-4 ${alerta.nivel === 'vermelho' ? 'text-red-500' : alerta.nivel === 'amarelo'
-            ? 'text-yellow-500': 'text-green-500'} font-medium">
+                <td class="py-2 px-4 ${alerta.nivel === 'vermelho' ? 'text-red-500' : alerta.nivel === 'amarelo' ? 'text-yellow-500' : 'text-green-500'} font-medium">
                     ${alerta.nivel ?? "—"}
                 </td>
                 <td class="py-2 pr-4">${alerta.valor ?? "-"}</td>
-                <td class="py-2 pl-4">
-                    ${alerta.data_hora ? new Date(alerta.data_hora).toLocaleString("pt-BR") : "-"}
-                </td>
+                <td class="py-2 pl-4">${alerta.data_hora ? new Date(alerta.data_hora).toLocaleString("pt-BR") : "-"}</td>
             </tr>
         `).join("");
 
     } catch (err) {
         console.error("Erro ao carregar histórico:", err);
-        tabelaBody.innerHTML = `<tr><td colspan="3" class="py-4 text-red-500 text-center">Erro ao carregar histórico</td></tr>`;
+        tabelaBody.innerHTML = `<tr><td colspan="4" class="py-4 text-red-500 text-center">Erro ao carregar histórico</td></tr>`;
     }
 }
+
+
 
 // Chama a função quando o script for carregado
 carregarHistorico();
