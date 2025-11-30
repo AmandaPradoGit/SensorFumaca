@@ -1,4 +1,4 @@
-export async function carregarSensor(sensorId) {
+/*port async function carregarSensor(sensorId) {
     try {
         const resp = await fetch(`/api/sensores/${sensorId}`);
         const sensor = await resp.json();
@@ -44,3 +44,4 @@ export async function carregarAlertas(sensorId) {
     }
 }
 
+*/

@@ -1,13 +1,22 @@
 import path from 'path';
 import express from 'express';
 import session from 'express-session';
-import routes from './routes.js';
+
+import usuarioRouter from './routes/usuarioRoutes.js';
+import sensorRouter from './routes/sensorRoutes.js';
+import alertaRouter from './routes/alertaRoutes.js';
+
 import userController from './controller/usuarioController.js';
+import sensorModel from './model/sensor.js';
+import * as alertaModel from './model/alertaModel.js';
+
 import {autenticar} from './auth.js';
 import { fileURLToPath } from 'url';
+import sensor from './model/sensor.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
 
 const app = express();
 
@@ -25,6 +34,11 @@ app.use(session({
         maxAge: 1000 * 60 * 60 * 24 //24 horas
     }
 }));
+
+//teste 
+app.get("/debug", (req, res) => {
+    res.json(req.session);
+});
 
 app.get('/', (req, res) => {
     res.redirect('/inicio');
@@ -55,8 +69,20 @@ app.get('/inicio', (req, res) => {
 });
 
 app.post('/entrar', userController.login);
-app.use('/usuarios', routes);
-app.use('/api/sensores', routes);
+app.use('/usuarios', usuarioRouter);
+app.use('/sensores', sensorRouter);
+
+app.get('/api/sensores', autenticar, async (req, res) => {
+  const usuarioId = req.session.usuario.id;
+
+  try {
+    const sensores = await alertaModel.listarComUltimaLeitura(usuarioId);
+    res.json(sensores);
+  } catch (err) {
+    console.error("ERRO EM /api/sensores:", err);
+    res.status(500).json({ erro: 'Erro ao buscar sensores' });
+  }
+});
 
 app.post('/logout', (req, res) => {
     req.session.destroy((err) => {
@@ -68,7 +94,44 @@ app.post('/logout', (req, res) => {
 });
 app.post('/cadastro', userController.register);
 
-const PORT = 3000;
+app.get('/api/alertas', autenticar, async (req, res) => {
+  const usuarioId = req.session.userId || (req.session.usuario && req.session.usuario.id);  const { sensorId } = req.query;
+  try {
+    const alertas = sensorId
+      ? await alertaModel.listarPorSensor(sensorId)
+      : await alertaModel.listarPorUsuario(usuarioId);
+    res.json(alertas);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ erro: 'Erro ao buscar alertas' });
+  }
+});
+
+app.use("/alertas", alertaRouter);
+
+// Recebe dados do ESP32 via POST
+app.post("/dados", async (req, res) => {
+  try {
+    const { sensor, valor, nivel } = req.body;
+
+    if (!sensor || valor === undefined) {
+      return res.status(400).json({ erro: "Dados incompletos" });
+    }
+
+    console.log(" Dados recebidos:", sensor, valor, nivel);
+
+    await addAlerta(sensor, valor, nivel);
+
+    res.status(200).json({ mensagem: "Alerta salvo com sucesso" });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ erro: "Erro ao salvar alerta" });
+  }
+});
+
+
+const PORT = 3001;
 app.listen(PORT,  '0.0.0.0', () => {
     console.log(`Servidor rodando na porta ${PORT}`);
 });

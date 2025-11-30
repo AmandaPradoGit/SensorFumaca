@@ -3,17 +3,16 @@ import sensorModel from '../model/sensor.js';
 class SensorController {
     async registerSensor(req, res) {
         try {
-            //Aceita os nomes dos campos do site E do app.
-            const { chave_sensor, nome_local, idUsuario } = req.body;
-
-            const finalSensorId = chave_sensor;
+            const { chave_sensor, nome_local } = req.body;
+            
+             const finalSensorId = chave_sensor;
             const finalNomeSala = nome_local;
 
             // Verifica se a requisição veio do app (que envia 'Content-Type: application/json')
             const isApp = req.is('json');
             const finalUsuarioId = isApp ? idUsuario : req.session?.usuario?.id;
 
-            // Validação com os dados unificados
+            
             if (!finalSensorId || !finalNomeSala || !finalUsuarioId) {
                   if (req.is('json')) {
                      return res.status(400).json({ 
@@ -22,8 +21,7 @@ class SensorController {
                 }
                 return res.redirect('/cadastrarSensores?erro=Preencha todos os campos');
             }
-
-            const sensorExistente = await sensorModel.buscarPorIdentificador(finalSensorId);
+              const sensorExistente = await sensorModel.buscarPorIdentificador(finalSensorId);
             if (sensorExistente) {
                 if (req.is('json')) {
                      return res.status(400).json({ 
@@ -63,27 +61,12 @@ class SensorController {
             if (!req.session?.usuario) {
                 return res.status(401).json({ error: 'Não autorizado' });
             }
+
             const sensores = await sensorModel.listarPorUsuario(req.session.usuario.id);
             res.json(sensores);
         } catch (error) {
             res.status(500).json({ error: 'Erro ao listar sensores' });
         }
     }
-    async listarComAlertas(req, res) {
-        try {
-            const isApp = req.is('json');
-            const usuarioId = isApp ? req.body?.idUsuario : req.session?.usuario?.id;
-
-            if (!usuarioId) {
-                return res.status(401).json({ error: 'Usuário não identificado' });
-            }
-
-            const sensoresComAlertas = await sensorModel.listarSensoresComAlertas(usuarioId);
-            res.json(sensoresComAlertas);
-        } catch (error) {
-            res.status(500).json({ error: 'Erro ao listar sensores com alertas' });
-        }
-    }
 }
-
 export default new SensorController();
