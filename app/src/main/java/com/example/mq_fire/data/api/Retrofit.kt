@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitInstance {
     // Com o comando 'adb reverse', o app pode acessar o 'localhost' do computador
-    private const val BASE_URL = "http://localhost:3000/"
+    private const val BASE_URL = "http://localhost:3001/"
 
     private val retrofit by lazy {
         Retrofit.Builder()

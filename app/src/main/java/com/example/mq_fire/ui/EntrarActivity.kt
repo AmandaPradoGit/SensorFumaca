@@ -10,8 +10,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.mq_fire.R
-import com.example.mq_fire.data.api.RetrofitInstance
 import com.example.mq_fire.data.model.AuthRequest
+import com.example.mq_fire.data.api.RetrofitInstance
 import kotlinx.coroutines.launch
 
 class EntrarActivity : AppCompatActivity() {

@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Permissão para notificações (Android 13+) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:usesCleartextTraffic="true"
@@ -28,6 +30,7 @@
         <activity android:name=".ui.CadastroActivity" />
         <activity android:name=".ui.SensoresActivity" />
         <activity android:name=".ui.CadastrarSensorActivity" />
+        <activity android:name=".ui.VisualizacaoActivity" />
 
     </application>
 
