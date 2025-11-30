@@ -98,4 +98,26 @@ export async function listarComUltimaLeitura(usuarioId) {
 
   const [rows] = await pool.execute(query, [usuarioId]);
   return rows;
+
+  
+}
+export async function listarPorData(usuarioId, data) {
+  const query = `
+    SELECT a.* FROM alertas a
+    JOIN sensores s ON a.sensor = s.identificador
+    WHERE s.usuario_id = ? AND DATE(a.data_hora) = ?
+  `;
+  const [rows] = await pool.execute(query, [usuarioId, data]);
+  return rows;
+}
+
+export async function listarSensoresEmAlerta(usuarioId) {
+  const query = `
+    SELECT DISTINCT a.sensor FROM alertas a
+    JOIN sensores s ON a.sensor = s.identificador
+    WHERE s.usuario_id = ? AND a.nivel = 'Alto'
+    AND a.data_hora >= NOW() - INTERVAL 1 HOUR
+  `;
+  const [rows] = await pool.execute(query, [usuarioId]);
+  return rows;
 }

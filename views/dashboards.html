@@ -8,8 +8,6 @@
   <!--Calendario -->
   <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css' rel='stylesheet' />
   <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
     :root {
@@ -17,6 +15,12 @@
     }
     body {
       background: #f3f3f3;
+    }
+    /* Classe para destacar o dia selecionado */
+    .dia-selecionado {
+      background-color: #e34444 !important;
+      color: white !important;
+      border-radius: 6px;
     }
     .fc .fc-button {
     background: var(--mq-red) !important;
@@ -82,49 +86,92 @@
     <main class="max-w-7xl mx-auto px-6 lg:px-12 pt-12 relative z-20">
         <h1 class="text-4xl font-normal text-gray-800 tracking-tight mb-12 mt-16">Dashboards</h1>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        <!-- Gráfico de linha -->
-        <div class="bg-white shadow rounded-lg p-6">
-            <h2 class="text-xl font-semibold text-gray-700 mb-4">Gráfico de Itens</h2>
-            <div class="w-full h-64 bg-gray-100 flex items-center justify-center text-gray-500">
-            <!-- chart.js -->
-            [Gráfico de Linha Placeholder]
-            </div>
-            <div class="mt-4 flex justify-between text-sm text-gray-600">
-            <span>Item 1</span>
-            <span>Item 2</span>
-            <span>Item 3</span>
-            <span>Item 4</span>
-            <span>Item 5</span>
-            </div>
-        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+          <!-- Card 1: Número de Alertas Hoje -->
+          <div class="bg-white shadow rounded-lg p-8">
+            <h1 class="text-sm font-semibold text-gray-600 mb-4">Número de Alertas<br>Hoje</h1>
+            <h2 class="text-6xl font-bold text-gray-800" id="alertas-hoje">XX</h2>
+          </div>
 
-        <!-- Calendário -->
-        <div id="calendario" class="bg-white shadow rounded-lg p-6 w-[500px] h-[500px] max-w-md mx-auto">
-            
-            <button id="btnExport" class="mt-16 w-full bg-[var(--mq-red)] text-white py-2 rounded hover:bg-red-600 transition">
-            Exportar Tabela de alertas
+          <!-- Card 2: Sensores em Alerta -->
+          <div class="bg-white shadow rounded-lg p-8">
+            <h1 class="text-sm font-semibold text-gray-600 mb-4">Sensores em Alerta no<br>Momento</h1>
+            <h2 class="text-6xl font-bold text-gray-800" id="sensores-alerta">XX</h2>
+          </div>
+
+          <!-- Calendário com Botão -->
+          <div class="flex flex-col gap-4">
+            <!-- Seletor de Sensores -->
+            <div class="bg-white shadow rounded-lg p-6">
+              <label class="text-sm font-semibold text-gray-600 mb-2 block">Selecionar Sensor</label>
+              <select id="seletor-sensores" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[var(--mq-red)] focus:ring-1 focus:ring-[var(--mq-red)]">
+                <option value="">-- Selecione um sensor --</option>
+              </select>
+            </div>
+
+            <!-- Calendário -->
+            <div id="calendario" class="bg-white shadow rounded-lg p-6"></div>
+            <button id="btnExport" class="w-full bg-[var(--mq-red)] text-white py-3 rounded font-semibold hover:bg-red-600 transition">
+              Importar Tabela de alertas do dia selecionado
             </button>
-        </div>
+          </div>
         </div>
   </main>
 
-
   <!-- Calendario -->
-   <script>
+
+  <script>
   document.addEventListener('DOMContentLoaded', function () {
     const calendarEl = document.getElementById('calendario');
+    let diaSelecionado = null; // guarda referência do elemento selecionado
+    let dataSelecionada = null; // guarda a data selecionada
+
     const calendar = new FullCalendar.Calendar(calendarEl, {
       initialView: 'dayGridMonth',
       locale: 'pt-br',
       initialDate: new Date(),
       headerToolbar: {
         left: 'prev',
-        center: 'title',
+        center: '',
         right: 'next'
+      },
+      dateClick: function(info) {
+        // Se já existe um dia selecionado
+        if (diaSelecionado) {
+          // Se clicou no mesmo dia → desseleciona
+          if (diaSelecionado === info.dayEl) {
+            diaSelecionado.classList.remove('dia-selecionado');
+            diaSelecionado = null;
+            dataSelecionada = null;
+            document.getElementById("btnExport").innerText = 
+              "Importar Tabela de alertas do dia selecionado";
+            return;
+          }
+          // Remove destaque do anterior
+          diaSelecionado.classList.remove('dia-selecionado');
+        }
+
+        // Marca o novo dia
+        info.dayEl.classList.add('dia-selecionado');
+        diaSelecionado = info.dayEl;
+        dataSelecionada = info.dateStr;
+
+        // Atualiza botão
+        document.getElementById("btnExport").innerText = 
+          "Importar Tabela de alertas de " + info.dateStr;
       }
     });
+
     calendar.render();
+
+    document.getElementById("btnExport").addEventListener("click", function () {
+      if (!dataSelecionada) {
+        alert("Selecione um dia no calendário primeiro!");
+        return;
+      }
+      // buscar os alertas da dataSelecionada
+      console.log("Exportando dados de:", dataSelecionada);
+    });
   });
 </script>
 
@@ -157,5 +204,47 @@ document.getElementById("btnExport").addEventListener("click", function () {
 </script>
 
  <script type="module" src="components/header.js"></script>
+ <script>
+async function carregarDadosDashboard() {
+  try {
+    const resposta = await fetch('/alertas/dashboard');
+    if (!resposta.ok) throw new Error('Erro ao buscar dados');
+    
+    const dados = await resposta.json();
+    document.getElementById('alertas-hoje').innerText = dados.alertasHoje;
+    document.getElementById('sensores-alerta').innerText = dados.sensoresEmAlerta;
+  } catch (erro) {
+    console.error('Erro:', erro);
+  }
+}
+
+carregarDadosDashboard();
+</script>
+
+<script>
+async function carregarSensores() {
+  try {
+    const resposta = await fetch("/sensores"); // rota GET do back-end
+    if (!resposta.ok) throw new Error("Erro ao buscar sensores");
+
+    const sensores = await resposta.json();
+    const seletor = document.getElementById("seletor-sensores");
+
+    seletor.innerHTML = '<option value="">-- Selecione um sensor --</option>';
+
+    sensores.forEach(sensor => {
+      const opt = document.createElement("option");
+      opt.value = sensor.id;
+      opt.textContent = sensor.nomeSala; // ou sensor.identificador
+      seletor.appendChild(opt);
+    });
+  } catch (erro) {
+    console.error("Erro:", erro);
+  }
+}
+
+// Chama ao carregar a página
+carregarSensores();
+</script>
 </body>
 </html>

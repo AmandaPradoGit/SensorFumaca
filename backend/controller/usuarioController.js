@@ -25,7 +25,7 @@ class UserController {
                 return res.redirect('/cadastro?erro=Email já cadastrado');
             }
 
-            const userId = await usuarioModel.criar(email, password);
+            const usuario = await usuarioModel.criar(email, password);
 
            if (req.is('json')) {
             // Se o Content-Type é JSON, então é o App Android.
