@@ -31,34 +31,34 @@
         </h1>
         <a href="sensores.html" class="text-sm text-red-600 hover:underline mb-6 inline-block"> Voltar </a>
 
-        <form method="POST" action="/sensores/register"  id="formCadastroSensor">
-            
-            <div class="mb-4">
-                <label for="nome_local" class="block text-base font-medium text-gray-700 mb-1">
-                    Nome da Sala / Local:
-                </label>
-                <input type="text" id="nome_local" name="nome_local" required
-                       class="w-full bg-gray-100 border-none rounded-lg px-3 py-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300 transition duration-150 h-10" 
-                       placeholder="Ex: Sala de Servidores">
-            </div>
+            <form method="POST" action="/sensores/register"  id="formCadastroSensor">
+                
+                <div class="mb-4">
+                    <label for="nome_local" class="block text-base font-medium text-gray-700 mb-1">
+                        Nome da Sala / Local:
+                    </label>
+                    <input type="text" id="nome_local" name="nome_local" required
+                        class="w-full bg-gray-100 border-none rounded-lg px-3 py-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300 transition duration-150 h-10" 
+                        placeholder="Ex: Sala de Servidores">
+                </div>
 
-            <div class="mb-4">
-                <label for="chave_sensor" class="block text-base font-medium text-gray-700 mb-1">
-                    Chave de Hardware / ID do Sensor:
-                </label>
-                <input type="text" id="chave_sensor" name="chave_sensor" required
-                       class="w-full bg-gray-100 border-none rounded-lg px-3 py-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300 transition duration-150 h-10" 
-                       placeholder="Ex: MQFIRE-SVR-001">
-                <p class="text-xs text-gray-500 mt-1 mb-16">Este ID deve ser único.</p>
-            </div>
-            
-            <div>
-                <button type="submit" 
-                        class="w-full bg-[--mq-red] text-white px-6 py-2 rounded-lg shadow-md hover:bg-rose-700 transition duration-300 text-base font-semibold h-10">
-                    Cadastrar Local
-                </button>
-            </div>
-        </form>
+                <div class="mb-4">
+                    <label for="chave_sensor" class="block text-base font-medium text-gray-700 mb-1">
+                        Chave de Hardware / ID do Sensor:
+                    </label>
+                    <input type="text" id="chave_sensor" name="chave_sensor" required
+                        class="w-full bg-gray-100 border-none rounded-lg px-3 py-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300 transition duration-150 h-10" 
+                        placeholder="Ex: MQFIRE-SVR-001">
+                    <p class="text-xs text-gray-500 mt-1 mb-16">Este ID deve ser único.</p>
+                </div>
+                
+                <div>
+                    <button type="submit" 
+                            class="w-full bg-[--mq-red] text-white px-6 py-2 rounded-lg shadow-md hover:bg-rose-700 transition duration-300 text-base font-semibold h-10">
+                        Cadastrar Local
+                    </button>
+                </div>
+            </form>
 
     </div>
 

@@ -19,6 +19,8 @@ class SensorModel {
         const [rows] = await pool.execute(query, [usuarioId]);
         return rows;
     }
+
+    
    // async InativarSensor(sensorId)(
      //   const query = "UPDATE sensores SET ativo = 0 WHERE id = ?";
        // const [result] = await pool.execute(query, [sensorId]);

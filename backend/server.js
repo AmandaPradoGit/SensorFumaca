@@ -1,6 +1,10 @@
 import path from 'path';
+import 'dotenv/config'; 
+
 import express from 'express';
 import session from 'express-session';
+import dotenv from 'dotenv';
+import axios from 'axios';
 
 import usuarioRouter from './routes/usuarioRoutes.js';
 import sensorRouter from './routes/sensorRoutes.js';
@@ -14,8 +18,12 @@ import { autenticar } from './auth.js';
 import { fileURLToPath } from 'url';
 
 
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.join(__dirname, '.env') });
+console.log("TELEGRAM_BOT_TOKEN:", !!process.env.TELEGRAM_BOT_TOKEN);
+console.log("TELEGRAM_CHAT_ID:", process.env.TELEGRAM_CHAT_ID);
 
 const app = express();
 
@@ -107,25 +115,36 @@ app.get('/api/alertas', autenticar, async (req, res) => {
 app.use("/alertas", alertaRouter);
 
 // Recebe dados do ESP32 via POST
-app.post("/dados", async (req, res) => {
+
+app.post("/dados", (req, res) => {
+  // 🔥 logs
+  console.log('>>>> /dados RECEBIDO - start', new Date().toISOString());
+  console.log('Headers:', req.headers);
+  console.log('Body present? ', req.body && Object.keys(req.body).length > 0);
+
   try {
     const { sensor, valor, nivel } = req.body;
-
-    if (!sensor || valor === undefined) {
-      return res.status(400).json({ erro: "Dados incompletos" });
-    }
-
     console.log("📡 Dados recebidos:", sensor, valor, nivel);
 
-    await addAlerta(sensor, valor, nivel);
+    // Processamento em background (não trava o ESP/Postman)
+    (async () => {
+      try {
+        await alertaModel.addAlerta(sensor, valor, nivel);
+        console.log("addAlerta finalizado em background");
+      } catch (err) {
+        console.error("Erro no addAlerta (background):", err);
+      }
+    })();
 
-    res.status(200).json({ mensagem: "Alerta salvo com sucesso" });
+    // Resposta imediata
+    return res.status(200).json({ mensagem: "Recebido" });
 
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ erro: "Erro ao salvar alerta" });
+    console.error("Erro inicial no /dados:", err);
+    return res.status(500).json({ erro: "Erro interno" });
   }
 });
+
 
 
 const PORT = 3001;
