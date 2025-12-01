@@ -34,7 +34,7 @@ export async function addAlerta(sensor, valor, nivel) {
     if (nivelNormalized === 'vermelho' || nivelNormalized === 'alto') {
       // busca chat do dono do sensor
       const q = `
-        SELECT u.telegram_chat_id, u.email
+        SELECT u.telegram_chat_id, u.email, s.nomeSala AS sala
         FROM sensores s
         JOIN usuario u ON u.id = s.usuario_id
         WHERE s.identificador = ?
@@ -42,12 +42,15 @@ export async function addAlerta(sensor, valor, nivel) {
       `;
       const [rows] = await pool.execute(q, [sensor]);
       const dbChatId = rows?.[0]?.telegram_chat_id ?? null;
+      const sala = rows?.[0]?.sala ?? '(sala desconhecida)';
       const fallbackChatId = process.env.TELEGRAM_CHAT_ID && process.env.TELEGRAM_CHAT_ID.trim() !== ""
         ? process.env.TELEGRAM_CHAT_ID.trim()
         : null;
       const chatId = dbChatId || fallbackChatId;
 
-      console.log("addAlerta: dbChatId =", dbChatId, "fallback =", fallbackChatId, "=> using:", chatId);
+      //console.log("addAlerta: dbChatId =", dbChatId, "fallback =", fallbackChatId, "=> using:", chatId);
+
+      console.log("addAlerta: dbChatId =", dbChatId, "sala =", sala, "fallback =", fallbackChatId, "=> using:", chatId);
 
       if (!chatId) {
         console.warn("addAlerta: nenhum chatId disponível — registro de falha será criado");
@@ -60,8 +63,8 @@ export async function addAlerta(sensor, valor, nivel) {
       }
 
       // monta mensagem (cuidado com HTML se conteúdo vier do dispositivo)
-      const mensagem = `<b>⚠️ ALARME VERMELHO</b>\nSensor: <code>${sensor}</code>\nValor: <b>${valor}</b>\nNível: <b>${nivel}</b>\nID alerta: ${insertedId}\n${new Date().toLocaleString('pt-BR')}`;
-
+      //const mensagem = `<b>⚠️ ALARME VERMELHO</b>\nSensor: <code>${sensor}</code>\nValor: <b>${valor}</b>\nNível: <b>${nivel}</b>\nID alerta: ${insertedId}\n${new Date().toLocaleString('pt-BR')}`;
+      const mensagem = `⚠️ *ALARME VERMELHO*\nSala: ${sala}\nSensor: ${sensor}\nValor: ${valor}\nNível: ${nivel}\nID: ${insertedId}\n${new Date().toLocaleString('pt-BR')}`;
       // 3) tenta enviar e guarda resultado
       const envio = await sendTelegramMessage(chatId, mensagem);
       console.log("addAlerta: resultado envio telegram:", envio);
