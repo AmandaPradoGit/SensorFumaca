@@ -18,28 +18,29 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get('/dashboard', autenticar, async (req, res) => {
+router.get("/dashboard", autenticar, async (req, res) => {
   const usuarioId = req.session.usuario.id;
   try {
-    console.log('Dashboard chamado para usuarioId:', usuarioId);
-    
-    // Alertas de hoje
-    const hoje = new Date().toISOString().split('T')[0];
-    console.log('Data de hoje:', hoje);
+    console.log("Dashboard chamado para usuarioId:", usuarioId);
+
+    const hoje = new Date().toISOString().split("T")[0];
+
     const alertasHoje = await alertaModel.listarPorData(usuarioId, hoje);
-    console.log('Alertas de hoje:', alertasHoje.length);
-    
-    // Sensores em alerta agora (nível alto)
+
     const sensoresAlerta = await alertaModel.listarSensoresEmAlerta(usuarioId);
-    console.log('Sensores em alerta:', sensoresAlerta.length);
-    
+
+    const intervaloMedio = await alertaModel.getIntervaloMedio(usuarioId);
+
     res.json({
       alertasHoje: alertasHoje.length,
-      sensoresEmAlerta: sensoresAlerta.length
+      sensoresEmAlerta: sensoresAlerta.length,
+      intervaloMedio: intervaloMedio || "00:00"
     });
   } catch (erro) {
-    console.error('Erro em /alertas/dashboard:', erro);
-    res.status(500).json({ error: erro.message || 'Erro ao carregar dados do dashboard' });
+    console.error("Erro em /alertas/dashboard:", erro);
+    res.status(500).json({
+      error: erro.message || "Erro ao carregar dados do dashboard"
+    });
   }
 });
 

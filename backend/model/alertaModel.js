@@ -99,23 +99,77 @@ export async function listarComUltimaLeitura(usuarioId) {
   const [rows] = await pool.execute(query, [usuarioId]);
   return rows;
 }
-export async function listarPorData(usuarioId, data) {
+
+export async function listarPorData(usuarioId) {
   const query = `
     SELECT a.* FROM alertas a
     JOIN sensores s ON a.sensor = s.identificador
-    WHERE s.usuario_id = ? AND DATE(a.data_hora) = ?
+    WHERE s.usuario_id = ? AND DATE(a.data_hora) = CURDATE()
   `;
-  const [rows] = await pool.execute(query, [usuarioId, data]);
+  const [rows] = await pool.execute(query, [usuarioId]);
   return rows;
 }
 
 export async function listarSensoresEmAlerta(usuarioId) {
   const query = `
-    SELECT DISTINCT a.sensor FROM alertas a
+    SELECT a.sensor, a.valor, a.data_hora
+    FROM alertas a
     JOIN sensores s ON a.sensor = s.identificador
-    WHERE s.usuario_id = ? AND a.nivel = 'Alto'
-    AND a.data_hora >= NOW() - INTERVAL 1 HOUR
+    WHERE s.usuario_id = ?
+    ORDER BY a.data_hora DESC
   `;
   const [rows] = await pool.execute(query, [usuarioId]);
-  return rows;
+
+  // Agrupar por sensor e pegar apenas o último alerta
+  const sensoresMap = new Map();
+  for (const alerta of rows) {
+    if (!sensoresMap.has(alerta.sensor)) {
+      sensoresMap.set(alerta.sensor, alerta);
+    }
+  }
+
+  const sensoresEmAlerta = [];
+  for (const alerta of sensoresMap.values()) {
+    const minutosPassados = (Date.now() - new Date(alerta.data_hora)) / 60000;
+
+    if (minutosPassados <= 5) {
+      if (alerta.valor < 50) {
+        // Estável → não entra na lista
+      } else {
+        // Alerta! → entra na lista de ativos
+        sensoresEmAlerta.push(alerta.sensor);
+      }
+    }
+  }
+
+  return sensoresEmAlerta;
+}
+
+
+
+export async function getIntervaloMedio(usuarioId) {
+  const query = `
+    SELECT a.data_hora 
+    FROM alertas a
+    JOIN sensores s ON a.sensor = s.identificador
+    WHERE s.usuario_id = ?
+    ORDER BY a.data_hora ASC
+  `;
+  const [rows] = await pool.execute(query, [usuarioId]);
+
+  if (rows.length < 2) return null;
+
+  let totalDiff = 0;
+  for (let i = 1; i < rows.length; i++) {
+    const anterior = new Date(rows[i - 1].data_hora);
+    const atual = new Date(rows[i].data_hora);
+    totalDiff += (atual - anterior);
+  }
+
+  const mediaMs = totalDiff / (rows.length - 1);
+  const mediaMin = Math.floor(mediaMs / 60000);
+  const horas = Math.floor(mediaMin / 60);
+  const minutos = mediaMin % 60;
+
+  return `${String(horas).padStart(2, "0")}:${String(minutos).padStart(2, "0")}`;
 }

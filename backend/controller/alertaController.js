@@ -27,3 +27,14 @@ export async function criarAlerta(req, res) {
     res.status(500).json({ erro: "Erro ao registrar alerta" });
   }
 }
+
+export async function intervaloMedio(req, res) {
+  try {
+    const usuarioId = req.params.usuarioId;
+    const intervalo = await getIntervaloMedio(usuarioId);
+    res.json({ intervaloMedio: intervalo });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ erro: "Erro ao calcular intervalo médio" });
+  }
+}
